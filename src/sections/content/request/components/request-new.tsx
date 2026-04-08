@@ -40,8 +40,6 @@ const RequestNew = () => {
   const totalRecords = listData?.[0]?.[0]?.intTotalRecords || 0;
   const totalPages = Math.ceil(totalRecords / pageSize);
 
-  const item = listData?.[0]?.[0]?.strBookingRequestGUID
-
   useEffect(() => {
     if (page > totalPages) {
       setPage(1);
@@ -164,7 +162,7 @@ const RequestNew = () => {
                     <Flag size={18} fill="currentColor" />
 
                     <button
-                      onClick={() => router.replaceParams(paths.content.detailRequest, { strBookingRequestGUID: item })}
+                      onClick={() => router.replaceParams(paths.content.detailRequest, { strBookingRequestGUID: header?.strBookingRequestGUID })}
                       className="uppercase tracking-wide cursor-pointer hover:underline decoration-blue-200 underline-offset-4"
                     >
                       {header.strCompanyName}

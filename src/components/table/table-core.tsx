@@ -5,7 +5,7 @@ import { ChevronUp, ChevronDown, ChevronsUpDown, Folder } from "lucide-react";
 export type ColumnDef<T> = {
   field: keyof T;
   headerName?: string;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (value: any, row: T, rowIndex: number) => React.ReactNode;
   width?: number;
   sort?: boolean;
   algin?: "center" | "start" | "end";
@@ -171,7 +171,7 @@ export function TableCore<T extends object>({
                             {col.render ? (
                               (() => {
                                 try {
-                                  return col.render(safeValue, safeRow);
+                                  return col.render(safeValue, safeRow, rIdx);
                                 } catch {
                                   return "--";
                                 }

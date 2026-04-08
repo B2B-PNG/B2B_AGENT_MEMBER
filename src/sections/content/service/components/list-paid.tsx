@@ -1,23 +1,23 @@
 import { TableCore, type ColumnDef } from "@/components/table/table-core";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useListPaidBooking } from "@/hooks/actions/useUser";
+import { fDateTime } from "@/utils/format-time";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface Props {
     item: any;
-    itemCard: any;
 }
 
-const ListPaid = ({ item, itemCard }: Props) => {
+const ListPaid = ({ item }: Props) => {
     const [page, setPage] = useState(1);
     const pageSize = 5;
     const { data, isLoading } = useQuery({
         queryKey: [QUERY_KEYS.USER.LIST_PAID_BOOKING, page],
         queryFn: () =>
             useListPaidBooking({
-                strAgentHostServiceItemGUID: item?.id,
+                strAgentHostServiceItemGUID: item?.strAgentHostServiceItemGUID,
             }),
         placeholderData: keepPreviousData,
     });
@@ -33,52 +33,56 @@ const ListPaid = ({ item, itemCard }: Props) => {
 
     const colDefs: ColumnDef<any>[] = [
         {
-            field: "stt",
+            field: "strBookingPaymentTermGUID",
             headerName: "STT",
-            render: (value) => (
-                <span className="text-gray-400 font-medium">{value}</span>
+            render: (_, __, rowIndex) => (
+                <span className="text-gray-400 font-medium">
+                    {rowIndex + 1}
+                </span>
             )
         },
 
         {
-            field: "payable",
+            field: "dblPriceCharge",
             headerName: "Payable",
             render: (value) => (
                 <div className="font-semibold text-gray-800 min-w-[100px]">
-                    {new Intl.NumberFormat('vi-VN').format(value)}{" "}
+                    {new Intl.NumberFormat('vi-VN').format(
+                        Number(value) || 0
+                    )}{" "}
                     <span className="text-[10px] align-top">đ</span>
                 </div>
             )
         },
 
         {
-            field: "deadline",
+            field: "dtmDateTo",
             headerName: "Deadline",
             render: (value) => (
                 <div className="text-xs text-gray-500 flex items-center justify-center gap-1.5 min-w-[170px]">
                     <Calendar size={13} className="text-gray-400" />
-                    {value}
+                    {value ? fDateTime(value) : "---"}
                 </div>
             )
         },
 
         {
-            field: "createDate",
+            field: "dtmCreatedDate",
             headerName: "Create Date",
             render: (value) => (
                 <div className="text-xs text-gray-500 flex items-center justify-center gap-1.5 min-w-[170px]">
                     <Calendar size={13} className="text-gray-400" />
-                    {value}
+                    {value ? fDateTime(value) : "---"}
                 </div>
             )
         },
 
         {
-            field: "paymentMethod",
+            field: "strPaymentTermCode",
             headerName: "Payment Method",
             render: (value) => (
                 <span className="bg-blue-50 text-blue-600 px-2.5 py-0.5 rounded-full text-xs font-medium">
-                    {value}
+                    {value || "---"}
                 </span>
             )
         },
@@ -91,7 +95,7 @@ const ListPaid = ({ item, itemCard }: Props) => {
                 <div className="space-y-1">
                     <div className="text-xs text-gray-400 font-medium uppercase">Service Name</div>
                     <div className="text-[15px] text-gray-800 font-semibold uppercase tracking-tight">
-                        {itemCard?.strServiceName}
+                        {item?.strServiceName}
                     </div>
                 </div>
 
@@ -99,7 +103,7 @@ const ListPaid = ({ item, itemCard }: Props) => {
                 <div className="space-y-1">
                     <div className="text-xs text-gray-400 font-medium uppercase">Agent host</div>
                     <div className="text-[15px] text-gray-800 font-semibold uppercase tracking-tight">
-                        {itemCard?.strAgentHostName}
+                        {item?.strAgentHostName}
                     </div>
                 </div>
 

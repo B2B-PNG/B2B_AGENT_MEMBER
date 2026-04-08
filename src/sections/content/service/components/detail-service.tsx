@@ -16,7 +16,7 @@ import type { IServiceDetailTable } from '@/hooks/interfaces/user';
 
 const DetailService = () => {
     const location = useLocation()
-    const item = location.state
+    const item = location.state.item
     const router = useRouter();
     const [open, setOpen] = useState({
         payable: false,
@@ -32,7 +32,7 @@ const DetailService = () => {
                 strMemberAgentGUID: user?.strUserGUID,
                 strCompanyAgentGUID: user?.strCompanyGUID,
                 strCompanyOwnerGUID: null,
-                strAgentHostServiceItemGUID: item?.id,
+                strAgentHostServiceItemGUID: item?.strAgentHostServiceItemGUID,
                 strFilterDateFrom: null,
                 strFilterDateTo: null,
                 strAgentHostServiceItemCode: null,
@@ -49,8 +49,7 @@ const DetailService = () => {
             }),
         placeholderData: keepPreviousData,
     });
-    const listDataTable = data?.[1] ?? []
-    const listDataCard = data?.[0]?.[0]
+    const listData = data?.[1] ?? []
 
     const colDefs: ColumnDef<IServiceDetailTable>[] = [
         {
@@ -149,14 +148,14 @@ const DetailService = () => {
             <div className="space-y-5 mt-2">
                 <div className="flex flex-col gap-1 font-sans">
                     <div className="flex items-center gap-1.5">
-                        <h2 className="text-lg font-bold text-gray-800">{listDataCard?.strServiceName}</h2>
+                        <h2 className="text-lg font-bold text-gray-800">{item?.strServiceName}</h2>
                         <button onClick={() => router.push(paths.content.detailTour)} className="text-[#004b91] cursor-pointer hover:opacity-80 transition-opacity">
                             <AlertCircle size={16} strokeWidth={2.5} />
                         </button>
                     </div>
 
                     <div className="text-[14px] text-gray-500 font-normal tracking-tight">
-                        <span>{fDateTime(listDataCard?.dtmDateFrom)} - {fDateTime(listDataCard?.dtmDateTo)}</span>
+                        <span>{fDateTime(item?.dtmDateFrom)} - {fDateTime(item?.dtmDateTo)}</span>
                     </div>
                 </div>
 
@@ -168,18 +167,18 @@ const DetailService = () => {
                         <div className="space-y-1">
                             <div className="text-xs text-gray-400 font-medium uppercase">Agent host</div>
                             <div className="text-[15px] text-gray-800 font-semibold uppercase tracking-tight">
-                                {listDataCard?.strAgentHostName}
+                                {item?.strAgentHostName}
                             </div>
                         </div>
 
                         <div className="space-y-1">
                             <div className="text-xs text-gray-400 font-medium uppercase">Group size</div>
-                            <div className="text-[15px] text-gray-700 font-semibold">{listDataCard?.intAdultsInService}</div>
+                            <div className="text-[15px] text-gray-700 font-semibold">{item?.intAdultsInService}</div>
                         </div>
 
                         <div className="space-y-1 text-right">
                             <div className="text-xs text-gray-400 font-medium uppercase">Status</div>
-                            <div className="text-[15px] text-gray-700 font-semibold">{listDataCard?.strBookingStatusName}</div>
+                            <div className="text-[15px] text-gray-700 font-semibold">{item?.strBookingStatusName}</div>
                         </div>
 
                         <div className="space-y-1">
@@ -188,7 +187,7 @@ const DetailService = () => {
                                 onClick={() => setOpen((prev) => ({ ...prev, payable: true }))}
                                 className="cursor-pointer text-[15px] text-[#0066b2] font-semibold underline decoration-blue-200 underline-offset-4"
                             >
-                                {new Intl.NumberFormat('vi-VN').format(listDataCard?.dblPriceTotal)} <span className="text-[10px] align-top">đ</span>
+                                {new Intl.NumberFormat('vi-VN').format(item?.dblPriceTotal)} <span className="text-[10px] align-top">đ</span>
                             </button>
                         </div>
 
@@ -198,14 +197,14 @@ const DetailService = () => {
                                 onClick={() => setOpen((prev) => ({ ...prev, paid: true }))}
                                 className="cursor-pointer text-[15px] text-[#0066b2] font-semibold underline decoration-blue-200 underline-offset-4"
                             >
-                                {new Intl.NumberFormat('vi-VN').format(listDataCard?.dblPricePaid)} <span className="text-[10px] align-top">đ</span>
+                                {new Intl.NumberFormat('vi-VN').format(item?.dblPricePaid)} <span className="text-[10px] align-top">đ</span>
                             </button>
                         </div>
 
                         <div className="space-y-1">
                             <div className="text-xs text-gray-400 font-medium uppercase">Hoa hồng</div>
                             <div className="text-[15px] text-gray-700 font-semibold">
-                                {new Intl.NumberFormat('vi-VN').format(listDataCard?.dblPriceAgentCom)} <span className="text-[10px] align-top">đ</span>
+                                {new Intl.NumberFormat('vi-VN').format(item?.dblPriceAgentCom)} <span className="text-[10px] align-top">đ</span>
                             </div>
                         </div>
 
@@ -218,7 +217,7 @@ const DetailService = () => {
                     </div>
 
                     <TableCore
-                        rowData={listDataTable ?? []}
+                        rowData={listData ?? []}
                         columnDefs={colDefs}
                         loading={isLoading}
                     />
@@ -229,12 +228,12 @@ const DetailService = () => {
 
             {open.payable && (
                 <PanelPopup title='List Payable' open={open.payable} onClose={() => setOpen((prev) => ({ ...prev, payable: false }))}>
-                    <ListPayable item={item} itemCard={listDataCard} />
+                    <ListPayable item={item} />
                 </PanelPopup>
             )}
             {open.paid && (
                 <PanelPopup title='List Paid' open={open.paid} onClose={() => setOpen((prev) => ({ ...prev, paid: false }))}>
-                    <ListPaid item={item} itemCard={listDataCard} />
+                    <ListPaid item={item} />
                 </PanelPopup>
             )}
         </div>

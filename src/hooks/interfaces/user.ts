@@ -1014,3 +1014,30 @@ export interface IServiceDetailTable {
   strSourceBookingGUID: string;
   strSupplierName: any;
 }
+
+
+export interface IListPayable {
+  strBookingPaymentTermGUID: string;
+  strAgentHostServiceItemGUID: string;
+  strPaymentTermGUID: any;
+  strPaymentTermCode: string;
+  strPaymentTermName: any;
+  intDayFrom: any;
+  intDayTo: any;
+  dblPaymentPercentage: number;
+  dtmDateFrom: string;
+  dtmDateTo: string;
+  intCurrencyID: number;
+  dblPriceCharge: number;
+  intNoOfNotified: number;
+  IsPreparePaid: boolean;
+  IsPaid: boolean;
+  IsToPayable: boolean;
+  IsCancellation: boolean;
+  IsEnable: boolean;
+  IsActive: boolean;
+  strCreatedBy: string;
+  strUpdatedBy: string;
+  dtmCreatedDate: string;
+  dtmLastUpdatedDate: string;
+}

@@ -11,7 +11,14 @@ export const SIDEBAR_DATA = [
         path: "",
         icon: ClipboardList,
         children: [
-            { title: "Booking Request", path: paths.content.requestBooking },
+            {
+                title: "Booking Request",
+                path: paths.content.requestBooking,
+                matchPaths: [
+                    paths.content.requestBooking,
+                    paths.content.detailRequest,
+                ]
+            },
             { title: "Yêu cầu Customize", path: paths.content.requestCustomize },
         ],
     },
@@ -37,6 +44,7 @@ export const SIDEBAR_DATA = [
 export interface ISidebarChildren {
     title: string;
     path: string;
+    matchPaths?: string[];
 }
 
 export interface ISidebarProps {
@@ -44,4 +52,5 @@ export interface ISidebarProps {
     path: string;
     icon?: any;
     children?: ISidebarChildren[];
+    matchPaths?: string[];
 }

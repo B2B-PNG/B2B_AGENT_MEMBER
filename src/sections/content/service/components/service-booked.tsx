@@ -1,13 +1,18 @@
 import Pagination from "@/components/pagination/pagination";
+import PanelPopup from "@/components/popup/panel-popup";
 import { TableCore, type ColumnDef } from "@/components/table/table-core";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useListAgentHostServiceItem } from "@/hooks/actions/useUser";
 import type { IServiceBooked } from "@/hooks/interfaces/user";
+import { useRouter } from "@/routes/hooks/use-router";
+import { paths } from "@/routes/paths";
 import { fDateTime } from "@/utils/format-time";
 import { useUserStore } from "@/zustand/useUserStore";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Banknote, Building2, Calendar, User } from "lucide-react";
 import { useEffect, useState } from "react";
+import ListPayable from "./list-payable";
+import ListPaid from "./list-paid";
 
 interface Props {
     appliedFilters?: {
@@ -19,8 +24,14 @@ interface Props {
 
 const ServiceBooked = ({ appliedFilters }: Props) => {
     const user = useUserStore((state) => state.user);
+    const router = useRouter();
+    const [item, setItem] = useState<IServiceBooked | null>(null);
     const [page, setPage] = useState(1);
     const pageSize = 5;
+    const [open, setOpen] = useState({
+        payable: false,
+        paid: false
+    })
     const { data, isLoading, isError } = useQuery({
         queryKey: [QUERY_KEYS.USER.LIST_AGENT_HOST_SERVICE_ITEM, page, appliedFilters],
         queryFn: () =>
@@ -92,7 +103,7 @@ const ServiceBooked = ({ appliedFilters }: Props) => {
 
                 return (
                     <div className="min-w-50">
-                        <div className="font-bold text-[#004b91] leading-tight uppercase text-sm">{row.strServiceName}</div>
+                        <button onClick={() => router.replaceParams(paths.content.detailService, { item: row })} className="font-bold text-[#004b91] leading-tight uppercase text-sm cursor-pointer">{row.strServiceName}</button>
                         <div className="text-xs text-brand-600 mt-1 flex items-center gap-1">
                             <Calendar size={12} /> <span>{fDateTime(row.dtmDateFrom)} - {fDateTime(row.dtmDateTo)}</span>
                         </div>
@@ -150,22 +161,30 @@ const ServiceBooked = ({ appliedFilters }: Props) => {
         {
             field: "dblPaymentAmount",
             headerName: "Tổng Số Tiền Phải Trả",
-            render: (value) => (
-                <div className={`min-w-[100px] ${value > 0 ? "text-red-500" : "text-gray-800"}`}>
-                    {new Intl.NumberFormat("vi-VN").format(value)}{" "}
+            render: (_, row) => (
+                <button onClick={() => {
+                    setItem(row)
+                    setOpen((prev) => ({ ...prev, payable: true }))
+                }} className={`${Number(row?.dblPaymentAmount) > 0 ? "text-red-500" : "text-green-600"} min-w-[100px] cursor-pointer border rounded-2xl`}>
+                    {new Intl.NumberFormat('vi-VN').format(
+                        Number.isFinite(Number(row?.dblPaymentAmount)) ? Number(row?.dblPaymentAmount) : 0
+                    )}{" "}
                     <span className="text-[10px] align-top">đ</span>
-                </div>
+                </button>
             ),
         },
 
         {
             field: "dblPricePaid",
             headerName: "Tổng đã trả",
-            render: (value) => (
-                <div className="min-w-[100px] text-green-600">
-                    {new Intl.NumberFormat("vi-VN").format(value || 0)}{" "}
+            render: (_, row) => (
+                <button onClick={() => {
+                    setItem(row)
+                    setOpen((prev) => ({ ...prev, paid: true }))
+                }} className="min-w-[100px] text-green-600 min-w-[100px] cursor-pointer border rounded-2xl">
+                    {new Intl.NumberFormat("vi-VN").format(row?.dblPricePaid || 0)}{" "}
                     <span className="text-[10px] align-top">đ</span>
-                </div>
+                </button>
             ),
         },
         {
@@ -206,6 +225,16 @@ const ServiceBooked = ({ appliedFilters }: Props) => {
                     onPageChange={(value) => setPage(value)}
                     totalPages={totalPages || 1}
                 />
+            )}
+            {open.payable && (
+                <PanelPopup title='List Payable' open={open.payable} onClose={() => setOpen((prev) => ({ ...prev, payable: false }))}>
+                    <ListPayable item={item} />
+                </PanelPopup>
+            )}
+            {open.paid && (
+                <PanelPopup title='List Paid' open={open.paid} onClose={() => setOpen((prev) => ({ ...prev, paid: false }))}>
+                    <ListPaid item={item} />
+                </PanelPopup>
             )}
         </div>
     )

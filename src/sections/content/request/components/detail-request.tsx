@@ -3,16 +3,16 @@ import { QUERY_KEYS } from '@/hooks/actions/query-keys';
 import { useDetailBookingRequest } from '@/hooks/actions/useUser';
 import { useRouter } from '@/routes/hooks/use-router';
 import { paths } from '@/routes/paths';
+import { fDateTime } from '@/utils/format-time';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Calendar, MessageSquare } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 
 const DetailRequest = () => {
+    const router = useRouter();
     const location = useLocation()
-
     const item = location.state
-
-    const { data, isError, isLoading, refetch } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: [QUERY_KEYS.USER.LIST_BOOKING_REQUEST, 1],
         queryFn: () =>
             useDetailBookingRequest({
@@ -21,46 +21,48 @@ const DetailRequest = () => {
         placeholderData: keepPreviousData,
     });
 
-    console.log("data",data)
-    const router = useRouter();
-
+    const listDataCompany = data?.[0]?.[0] ?? [];
+    const listDataService = data?.[2] ?? [];
+console.log("first",listDataService)
     const colDefs: ColumnDef<any>[] = [
         {
             field: "stt",
             headerName: "STT",
-            render: (value) => <span className="text-gray-400 font-medium">{value}</span>
+            render: (_, __, rowIndex) => (
+                <span className="text-gray-400 font-medium">
+                    {rowIndex + 1}
+                </span>
+            )
         },
         {
-            field: "serviceName",
+            field: "strServiceName",
             headerName: "Tên dịch vụ",
             render: (_, row) => {
 
                 return (
-                    <div className="">
-                        <div className="font-bold text-[#004b91] leading-tight uppercase text-sm">{row.serviceName}</div>
+                    <div className="min-w-full">
+                        <div className="font-bold text-[#004b91] leading-tight uppercase text-sm">{row.strServiceName}</div>
                         <div className="text-xs text-brand-600 mt-1 flex items-center gap-1">
-                            <Calendar size={12} /> {row.serviceDate}
+                            <Calendar size={12} />
+                            <span>{fDateTime(row.dtmDateFrom)} - {fDateTime(row.dtmDateTo)}</span>
                         </div>
                     </div>
                 )
             }
         },
         {
-            field: "type",
+            field: "strType",
             headerName: "Kiểu",
             render: (value) => (
                 <div className="flex justify-center min-w-25">
                     <div className="flex items-center gap-1 text-gray-700 italic">
-                        <span className="text-[13px] font-bold">Category:</span>
-                        <span className="text-sm">
-                            {value === "1" ? "★" : value}
-                        </span>
+                        <span className="text-sm" dangerouslySetInnerHTML={{ __html: value }} />
                     </div>
-                </div>
+                </div >
             ),
         },
         {
-            field: "totalGuest",
+            field: "intQuantity",
             headerName: "Tổng số khách",
             render: (value) => (
                 <div className="flex justify-center min-w-20">
@@ -71,7 +73,7 @@ const DetailRequest = () => {
             ),
         },
         {
-            field: "totalPrice",
+            field: "dblPriceTotal",
             headerName: "Tổng giá",
             render: (value) => (
                 <div className="">
@@ -83,28 +85,6 @@ const DetailRequest = () => {
             ),
         },
     ];
-
-    const mockData = [
-        {
-            stt: 1,
-            serviceName: "Tour Đà Nẵng 2N1Đ",
-            serviceDate: new Date("2025-08-18").getTime(),
-            type: "1",
-            totalGuest: 101,
-            totalPrice: 0,
-        },
-    ];
-
-    const auditLog = {
-        result: mockData,
-        meta: {
-            pageCount: 5,
-        },
-    };
-
-    const alLoading = false;
-
-
 
     return (
         <div className="max-w-7xl mx-auto bg-[#f8fafc] min-h-screen">
@@ -131,13 +111,13 @@ const DetailRequest = () => {
                             <div className="grid grid-cols-2 gap-x-20">
                                 <div className="text-sm">
                                     <span className="text-gray-400 font-medium">Công ty</span>
-                                    <div className="mt-1 text-[#004b91] font-semibold uppercase">CÔNG TY KẾT NỐI DU LỊCH</div>
+                                    <div className="mt-1 text-[#004b91] font-semibold uppercase">{listDataCompany?.strCompanyName}</div>
                                 </div>
                             </div>
                         </div>
                         <div className="text-right">
                             <span className="text-xs text-gray-400 font-normal uppercase tracking-wider">Trạng thái: </span>
-                            <span className="text-xs font-bold text-gray-600">Request Process</span>
+                            <span className="text-xs font-bold text-gray-600">{listDataCompany?.strRequestProcessName}</span>
                         </div>
                     </div>
                 </div>
@@ -147,24 +127,24 @@ const DetailRequest = () => {
                     <div className="grid grid-cols-3 gap-y-6">
                         <div className="space-y-1">
                             <div className="text-xs text-gray-400 font-medium uppercase">Mã yêu cầu</div>
-                            <div className="text-[15px] text-gray-700 font-semibold">CA261D</div>
+                            <div className="text-[15px] text-gray-700 font-semibold">{listDataCompany?.strBookingRequestCode}</div>
                         </div>
                         <div className="space-y-1">
                             <div className="text-xs text-gray-400 font-medium uppercase">Tổng số khách</div>
-                            <div className="text-[15px] text-gray-700 font-semibold">101</div>
+                            <div className="text-[15px] text-gray-700 font-semibold">{Number(listDataCompany?.intAdult) + Number(listDataCompany?.intChildren)}</div>
                         </div>
                         <div className="space-y-1 text-right">
                             <div className="text-xs text-gray-400 font-medium uppercase">Tổng số ngày</div>
-                            <div className="text-[15px] text-gray-700 font-semibold">2</div>
+                            <div className="text-[15px] text-gray-700 font-semibold">{listDataCompany?.intNoOfDay}</div>
                         </div>
                         <div className="space-y-1">
                             <div className="text-xs text-gray-400 font-medium uppercase">Ngày gửi yêu cầu</div>
-                            <div className="text-[15px] text-gray-700 font-normal">T2, 18 Thg 08, 2025</div>
+                            <div className="text-[15px] text-gray-700 font-normal">{fDateTime(listDataCompany?.dtmCreatedDate)}</div>
                         </div>
                         <div className="space-y-1">
                             <div className="text-xs text-gray-400 font-medium uppercase">Tổng Giá</div>
                             <div className="text-gray-700">
-                                {new Intl.NumberFormat('vi-VN').format(0)} <span className="text-[10px] align-top">đ</span>
+                                {new Intl.NumberFormat('vi-VN').format(listDataCompany?.dblPriceTotal)} <span className="text-[10px] align-top">đ</span>
                             </div>
                         </div>
                     </div>
@@ -176,9 +156,9 @@ const DetailRequest = () => {
                     </div>
 
                     <TableCore
-                        rowData={auditLog?.result ?? []}
+                        rowData={listDataService ?? []}
                         columnDefs={colDefs}
-                        loading={alLoading}
+                        loading={isLoading}
                     />
 
                 </div>
@@ -186,7 +166,7 @@ const DetailRequest = () => {
                 <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                     <h2 className="text-lg font-bold text-gray-800 mb-4">Booking Request</h2>
                     <div className="p-4 bg-gray-50 rounded-xl text-sm text-gray-600 font-normal leading-relaxed italic">
-                        "toi cần"
+                        Không có dữ liệu
                     </div>
                 </div>
             </div>

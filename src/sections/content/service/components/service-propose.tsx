@@ -10,6 +10,8 @@ import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useListAgentHostServiceItem } from "@/hooks/actions/useUser";
 import { useUserStore } from "@/zustand/useUserStore";
 import type { IServicePropose } from "@/hooks/interfaces/user";
+import PanelPopup from "@/components/popup/panel-popup";
+import ListPayable from "./list-payable";
 
 interface Props {
     appliedFilters?: {
@@ -22,6 +24,10 @@ interface Props {
 const ServicePropose = ({ appliedFilters }: Props) => {
     const user = useUserStore((state) => state.user);
     const router = useRouter()
+    const [item, setItem] = useState<IServicePropose | null>(null);
+    const [open, setOpen] = useState({
+        payable: false,
+    })
     const [page, setPage] = useState(1);
     const pageSize = 5;
     const { data, isLoading, isError } = useQuery({
@@ -79,10 +85,7 @@ const ServicePropose = ({ appliedFilters }: Props) => {
             headerName: "Tên dịch vụ",
             render: (_, row) => {
                 return (
-                    <button onClick={() => router.replaceParams(paths.content.detailService, {
-                        id: row?.strAgentHostServiceItemGUID
-                    }
-                    )} className="min-w-80 cursor-pointer">
+                    <button onClick={() => router.replaceParams(paths.content.detailService, { item: row })} className="min-w-80 cursor-pointer">
                         <div className="font-bold text-[#004b91] leading-tight uppercase text-sm">{row?.strServiceName}</div>
                         <div className="text-xs text-brand-600 mt-1 flex items-center gap-1">
                             <Calendar size={12} /> <span>{fDateTime(row.dtmDateFrom)} - {fDateTime(row.dtmDateTo)}</span>
@@ -137,13 +140,16 @@ const ServicePropose = ({ appliedFilters }: Props) => {
         {
             field: "dblPaymentAmount",
             headerName: "Phải trả",
-            render: (value) => (
-                <div className={`${value > 0 ? "text-red-500" : "text-green-600"} min-w-[100px]`}>
+            render: (_, row) => (
+                <button onClick={() => {
+                    setItem(row)
+                    setOpen((prev) => ({ ...prev, payable: true }))
+                }} className={`${Number(row?.dblPaymentAmount) > 0 ? "text-red-500" : "text-green-600"} min-w-[100px] cursor-pointer border rounded-2xl`}>
                     {new Intl.NumberFormat('vi-VN').format(
-                        Number.isFinite(Number(value)) ? Number(value) : 0
+                        Number.isFinite(Number(row?.dblPaymentAmount)) ? Number(row?.dblPaymentAmount) : 0
                     )}{" "}
                     <span className="text-[10px] align-top">đ</span>
-                </div>
+                </button>
             ),
         },
 
@@ -195,6 +201,12 @@ const ServicePropose = ({ appliedFilters }: Props) => {
                     onPageChange={(value) => setPage(value)}
                     totalPages={totalPages || 1}
                 />
+            )}
+
+            {open.payable && (
+                <PanelPopup title='List Payable' open={open.payable} onClose={() => setOpen((prev) => ({ ...prev, payable: false }))}>
+                    <ListPayable item={item} />
+                </PanelPopup>
             )}
         </div>
     )

@@ -9,6 +9,11 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useListAgentHostServiceItem } from "@/hooks/actions/useUser";
 import type { IServiceReverHold } from "@/hooks/interfaces/user";
+import { paths } from "@/routes/paths";
+import { useRouter } from "@/routes/hooks/use-router";
+import PanelPopup from "@/components/popup/panel-popup";
+import ListPayable from "./list-payable";
+import ListPaid from "./list-paid";
 
 interface Props {
     appliedFilters?: {
@@ -20,8 +25,14 @@ interface Props {
 
 const ServiceReservationHold = ({ appliedFilters }: Props) => {
     const user = useUserStore((state) => state.user);
+    const router = useRouter();
+    const [item, setItem] = useState<IServiceReverHold | null>(null);
     const [page, setPage] = useState(1);
     const pageSize = 5;
+    const [open, setOpen] = useState({
+        payable: false,
+        paid: false
+    })
     const { data, isLoading, isError } = useQuery({
         queryKey: [QUERY_KEYS.USER.LIST_AGENT_HOST_SERVICE_ITEM, page, appliedFilters],
         queryFn: () =>
@@ -46,6 +57,7 @@ const ServiceReservationHold = ({ appliedFilters }: Props) => {
             }),
         placeholderData: keepPreviousData,
     });
+
     const listData = data?.[0] ?? [];
     const totalRecords = listData?.[0]?.intTotalRecords || 0;
     const totalPages = Math.ceil(totalRecords / pageSize);
@@ -85,9 +97,10 @@ const ServiceReservationHold = ({ appliedFilters }: Props) => {
 
                 return (
                     <div className="min-w-[250px] space-y-1">
-                        <div className="font-bold text-[#004b91] leading-tight uppercase text-sm">
+                        <button className="font-bold text-[#004b91] leading-tight uppercase text-sm cursor-pointer text-start"
+                            onClick={() => router.replaceParams(paths.content.detailService, { item: row })}>
                             {row.strServiceName}
-                        </div>
+                        </button>
                         <div className="text-[11px] flex gap-2">
                             <span className="text-gray-500 font-bold text-xs italic">
                                 Category: <span className="text-yellow-500 not-italic">{categoryText}</span>
@@ -150,22 +163,30 @@ const ServiceReservationHold = ({ appliedFilters }: Props) => {
         {
             field: "dblPaymentAmount",
             headerName: "Tổng Số Tiền Phải Trả",
-            render: (value) => (
-                <div className={`min-w-[100px] ${value > 0 ? "text-red-500" : "text-gray-800"}`}>
-                    {new Intl.NumberFormat("vi-VN").format(value)}{" "}
+            render: (_, row) => (
+                <button onClick={() => {
+                    setItem(row)
+                    setOpen((prev) => ({ ...prev, payable: true }))
+                }} className={`${Number(row?.dblPaymentAmount) > 0 ? "text-red-500" : "text-green-600"} min-w-[100px] cursor-pointer border rounded-2xl`}>
+                    {new Intl.NumberFormat('vi-VN').format(
+                        Number.isFinite(Number(row?.dblPaymentAmount)) ? Number(row?.dblPaymentAmount) : 0
+                    )}{" "}
                     <span className="text-[10px] align-top">đ</span>
-                </div>
+                </button>
             ),
         },
 
         {
             field: "dblPricePaid",
             headerName: "Tổng đã trả",
-            render: (value) => (
-                <div className="min-w-[100px] text-green-600">
-                    {new Intl.NumberFormat("vi-VN").format(value || 0)}{" "}
+            render: (_, row) => (
+                <button onClick={() => {
+                    setItem(row)
+                    setOpen((prev) => ({ ...prev, paid: true }))
+                }} className="min-w-[100px] text-green-600 min-w-[100px] cursor-pointer border rounded-2xl">
+                    {new Intl.NumberFormat("vi-VN").format(row?.dblPricePaid || 0)}{" "}
                     <span className="text-[10px] align-top">đ</span>
-                </div>
+                </button>
             ),
         },
 
@@ -232,6 +253,17 @@ const ServiceReservationHold = ({ appliedFilters }: Props) => {
                     onPageChange={(value) => setPage(value)}
                     totalPages={totalPages || 1}
                 />
+            )}
+
+            {open.payable && (
+                <PanelPopup title='List Payable' open={open.payable} onClose={() => setOpen((prev) => ({ ...prev, payable: false }))}>
+                    <ListPayable item={item} />
+                </PanelPopup>
+            )}
+            {open.paid && (
+                <PanelPopup title='List Paid' open={open.paid} onClose={() => setOpen((prev) => ({ ...prev, paid: false }))}>
+                    <ListPaid item={item} />
+                </PanelPopup>
             )}
         </div>
     )

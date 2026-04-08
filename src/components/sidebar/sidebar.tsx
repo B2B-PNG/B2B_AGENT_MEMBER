@@ -34,10 +34,19 @@ const SidebarItem = ({
 
     const hasChildren = item.children && item.children.length > 0;
 
+    const isMatchPath = (path: string, matchPaths?: string[]) => {
+        if (matchPaths && matchPaths.length > 0) {
+            return matchPaths.some(p => activePath.startsWith(p));
+        }
+        return activePath.startsWith(path);
+    };
+
     const isParentActive =
-        activePath === item.path ||
+        (item.matchPaths
+            ? item.matchPaths.some(p => activePath.startsWith(p))
+            : activePath === item.path) ||
         item.children?.some((c: any) =>
-            activePath.startsWith(c.path)
+            isMatchPath(c.path, c.matchPaths)
         );
 
     const [isOpen, setIsOpen] = useState(isParentActive);
@@ -111,7 +120,7 @@ const SidebarItem = ({
                     <div className="absolute -left-3 top-0 bottom-2 w-px bg-gray-100" />
 
                     {item.children?.map((child: any, index: number) => {
-                        const isChildActive = activePath.startsWith(child.path);
+                        const isChildActive = isMatchPath(child.path, child.matchPaths);
 
                         return (
                             <div
