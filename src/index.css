@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tùy chỉnh thanh cuộn cho toàn bộ trang hoặc các phần tử có overflow */
+::-webkit-scrollbar {
+  width: 8px; /* Độ rộng của thanh cuộn dọc */
+  height: 8px; /* Độ cao của thanh cuộn ngang */
+}
+
+/* Phần nền của thanh cuộn */
+::-webkit-scrollbar-track {
+  background: #f1f5f9; /* Màu xám rất nhạt, tiệm cận màu nền iTourlink */
+  border-radius: 10px;
+}
+
+/* Phần tay cầm thanh cuộn (thanh trượt) */
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1; /* Màu xám trung tính mặc định */
+  border-radius: 10px;
+  border: 2px solid #f1f5f9; /* Tạo khoảng trống giữa thanh trượt và track */
+}
+
+/* Hiệu ứng khi di chuột vào thanh cuộn */
+::-webkit-scrollbar-thumb:hover {
+  background: #4e6d9a; /* Đổi sang màu xanh thương hiệu khi hover */
+}
+

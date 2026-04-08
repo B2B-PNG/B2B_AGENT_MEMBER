@@ -1,0 +1,34 @@
+export const paths = {
+  root: "/",
+  comingSoon: "/coming-soon",
+  auth: {
+    signIn: "/sign-in",
+    signUp: "/sign-up",
+  },
+  content: {
+    info: "/info",
+    requestBooking: "/request-booking",
+    detailRequest: "/detail-request",
+    requestCustomize: "/request-customize",
+    quote: "/quote",
+    service: "/service",
+    detailService: "/detail-service",
+    feedback: "/feedback",
+    pricing: "/pricing",
+    reportFinance: "/report-finance",
+    reportApproved: "/report-approved",
+    agent: "/agent",
+    tourBookings: "/tour-bookings",
+    tourCancelled: "/tour-cancelled",
+    tourProposals: "/tour-proposals",
+    detailTour: "/detail-tour",
+  },
+  overlay: {
+    notification: "/notification",
+    cart: "/cart"
+  },
+  backdoor: "/backdoor",
+  page403: "/error/403",
+  page404: "/error/404",
+  page500: "/error/500",
+};

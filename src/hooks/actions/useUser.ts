@@ -1,0 +1,198 @@
+import apiClient from "@/axios";
+
+export const useListUserInCompanyOwner = async (body: any) => {
+    const res = await apiClient.post(
+        "user/GetListUserInCompanyOwner",
+        body
+    );
+    return res.data;
+};
+
+export const addUserInCompany = async (body: any) => {
+    const res = await apiClient.post(
+        "user/AddUserInCompany",
+        body
+    );
+    return res.data;
+};
+
+
+
+export const useCheckAgentRegisterByEmail = async (body: any) => {
+    const res = await apiClient.post(
+        "public/GetCheckAgentRegisterByEmail",
+        body
+    );
+    return res.data;
+};
+
+export const updMemberInfoProfile = async (body: any) => {
+    const res = await apiClient.post(
+        "user/UpdMemberInfoProfile",
+        body
+    );
+    return res.data;
+};
+
+
+export const useListBookingRequest = async (body: any) => {
+    const res = await apiClient.post(
+        "request/GetListBookingRequest",
+        body
+    );
+    return res.data;
+};
+export const useListAgentRequest = async (body: any) => {
+    const res = await apiClient.post(
+        "request/GetListAgentRequest",
+        body
+    );
+    return res.data;
+};
+export const useReportPayableBookingItemByAgent = async (body: any) => {
+    const res = await apiClient.post(
+        "payrcvbooking/GetReportPayableBookingItemByAgent",
+        body
+    );
+    return res.data;
+};
+export const useReportCommissionByAgent = async (body: any) => {
+    const res = await apiClient.post(
+        "booking/GetReportCommissionByAgent",
+        body
+    );
+    return res.data;
+};
+export const useListPaidBookingItem = async (body: any) => {
+    const res = await apiClient.post(
+        "payrcvbooking/GetListPaidBookingItem",
+        body
+    );
+    return res.data;
+};
+export const useListCompanyOwner = async (body: any) => {
+    const res = await apiClient.post(
+        "user/GetListCompanyOwner",
+        body
+    );
+    return res.data;
+};
+export const useListTourCustomized = async (body: any) => {
+    const res = await apiClient.post(
+        "tourcustomized/GetListTourCustomized",
+        body
+    );
+    return res.data;
+};
+export const useFilterCompanyBankAccount = async (body: any) => {
+    const res = await apiClient.post(
+        "user/GetFilterCompanyBankAccount",
+        body
+    );
+    return res.data;
+};
+export const useListSaleRequest = async (body: any) => {
+    const res = await apiClient.post(
+        "request/GetListSaleRequest",
+        body
+    );
+    return res.data;
+};
+export const useListAgentForGroup = async (body: any) => {
+    const res = await apiClient.post(
+        "booking/GetListAgentForGroup",
+        body
+    );
+    return res.data;
+};
+export const useReportReceivableByAgent = async (body: any) => {
+    const res = await apiClient.post(
+        "booking/GetReportReceivableByAgent",
+        body
+    );
+    return res.data;
+};
+export const useReportCommissionByAgentHost = async (body: any) => {
+    const res = await apiClient.post(
+        "booking/GetReportCommissionByAgentHost",
+        body
+    );
+    return res.data;
+};
+export const useListAgentHostServiceItem = async (body: any) => {
+    const res = await apiClient.post(
+        "booking/GetListAgentHostServiceItem",
+        body
+    );
+    return res.data;
+};
+export const useListPayableBooking = async (body: any) => {
+    const res = await apiClient.post(
+        "payrcvbooking/GetListPayableBooking",
+        body
+    );
+    return res.data;
+};
+export const useListPaidBooking = async (body: any) => {
+    const res = await apiClient.post(
+        "payrcvbooking/GetListPaidBooking",
+        body
+    );
+    return res.data;
+};
+export const useUpdMemberPassword = async (body: any) => {
+    const res = await apiClient.post(
+        "user/UpdMemberPassword",
+        body
+    );
+    return res.data;
+};
+export const useCheckMemberPassword = async (body: any) => {
+    const res = await apiClient.post(
+        "user/CheckMemberPassword",
+        body
+    );
+    return res.data;
+};
+export const useUpdCompanyInfo = async (body: any) => {
+    const res = await apiClient.post(
+        "user/UpdCompanyInfo",
+        body
+    );
+    return res.data;
+};
+export const useAddCompanyBankAccount = async (body: any) => {
+    const res = await apiClient.post(
+        "user/AddCompanyBankAccount",
+        body
+    );
+    return res.data;
+};
+export const useGetFilterCompanyBankAccount = async (body: any) => {
+    const res = await apiClient.post(
+        "user/GetFilterCompanyBankAccount",
+        body
+    );
+    return res.data;
+};
+export const useUpdCompanyBankAccount = async (body: any) => {
+    const res = await apiClient.post(
+        "user/UpdCompanyBankAccount",
+        body
+    );
+    return res.data;
+};
+export const useDelCompanyBankAccount = async (body: any) => {
+    const res = await apiClient.post(
+        "user/DelCompanyBankAccount",
+        body
+    );
+    return res.data;
+};
+export const useAddSaleRequest = async (body: any) => {
+    const res = await apiClient.post(
+        "request/AddSaleRequest",
+        body
+    );
+    return res.data;
+};
