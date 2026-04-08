@@ -89,6 +89,6 @@ export const STATES_OPTIONS = [
 
 export const REFUNDS_OPTIONS = [
     { label: "--- Loại hoàn trả ---", value: "" },
-    { label: "Refund", value: "refund" },
-    { label: "Commission", value: "commission" },
+    { label: "Refund", value: "1" },
+    { label: "Commission", value: "2" },
 ];

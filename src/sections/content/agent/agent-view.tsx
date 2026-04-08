@@ -9,19 +9,19 @@ import { useListCompanyOwner } from "@/hooks/actions/useUser";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useUserStore } from "@/zustand/useUserStore";
 import type { IAgent } from "@/hooks/interfaces/user";
+import { useToastStore } from "@/zustand/useToastStore";
 
 const AgentView = () => {
+    const { showToast } = useToastStore()
     const user = useUserStore((state) => state.user);
     const [filters, setFilters] = useState({
-        page: String(1),
-        limit: String(50),
         nameProvider: "",
     });
-
+    const [appliedFilters, setAppliedFilters] = useState(filters);
     const [page, setPage] = useState(1);
     const pageSize = 5;
     const { data, isError, isLoading } = useQuery({
-        queryKey: [QUERY_KEYS.USER.LIST_COMPANY_OWNER, page],
+        queryKey: [QUERY_KEYS.USER.LIST_COMPANY_OWNER, page, appliedFilters],
         queryFn: () =>
             useListCompanyOwner({
                 strUserPartnerGUID: user?.strUserGUID,
@@ -30,7 +30,7 @@ const AgentView = () => {
                 intCurPage: page,
                 intPageSize: pageSize,
                 strOrder: null,
-                strFilterCompanyName: null,
+                strFilterCompanyName: appliedFilters?.nameProvider || null,
                 strCompanyNameUrl: null,
                 IsOwnerFriend: true,
                 tblsReturn: "[0]"
@@ -47,45 +47,28 @@ const AgentView = () => {
         }
     }, [totalPages]);
 
+    const handleSearch = () => {
+        setAppliedFilters(filters)
+        setPage(1)
+    };
+
+    const handleReset = () => {
+        const defaultFilters = {
+            nameProvider: "",
+        };
+        setFilters(defaultFilters);
+        setAppliedFilters(defaultFilters);
+        setPage(1);
+    };
+
     const onChangeFilters = (key: string, value: string | number) => {
-        let newValue = value;
-
-        if (key === "startTime" && value) {
-            const date = new Date(Number(value));
-            date.setUTCHours(0, 0, 0, 0);
-            newValue = date.getTime();
-        }
-
-        if (key === "endTime" && value) {
-            const date = new Date(Number(value));
-            date.setUTCHours(23, 59, 59, 999);
-            newValue = date.getTime();
-        }
+        let newValue: string | number = value;
 
         setFilters((prev) => ({
             ...prev,
             [key]: String(newValue),
-            page: String(1),
         }));
     };
-
-    const handleSearch = () => {
-        setFilters((prev) => ({
-            ...prev,
-            page: "1",
-        }));
-    };
-
-    const handleReset = () => {
-        setFilters({
-            page: "1",
-            limit: "50",
-            nameProvider: "",
-        });
-    };
-
-
-
 
     const colDefs: ColumnDef<IAgent>[] = [
         {
@@ -108,17 +91,17 @@ const AgentView = () => {
         {
             field: "No",
             headerName: "Thao tác",
-            render: (_, row) => (
+            render: (_) => (
                 <div className="flex items-center gap-2 min-w-[150px]">
                     <button
-                        onClick={() => console.log('Tariff', row)}
-                        className="px-4 py-1.5 bg-[#004b91] text-white text-[13px] font-medium rounded hover:bg-[#003d76] transition-all shadow-sm"
+                        onClick={() => showToast("info", "Sắp ra mắt")}
+                        className="cursor-pointer px-4 py-1.5 bg-[#004b91] text-white text-[13px] font-medium rounded hover:bg-[#003d76] transition-all shadow-sm"
                     >
                         Tariff
                     </button>
                     <button
-                        onClick={() => console.log('Shop', row)}
-                        className="px-4 py-1.5 bg-[#004b91] text-white text-[13px] font-medium rounded hover:bg-[#003d76] transition-all shadow-sm"
+                        onClick={() => showToast("info", "Sắp ra mắt")}
+                        className="cursor-pointer px-4 py-1.5 bg-[#004b91] text-white text-[13px] font-medium rounded hover:bg-[#003d76] transition-all shadow-sm"
                     >
                         Shop
                     </button>

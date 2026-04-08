@@ -6,7 +6,7 @@ import ReportPaymentReview from "./components/report-payment-review";
 
 const REPORT_TABS = [
     { id: "pending", label: "Chờ duyệt", icon: Clock, component: ReportPendingApproval },
-    { id: "review", label: "Kiểm tra các khoản thanh toán (0)", icon: ClipboardCheck, component: ReportPaymentReview },
+    { id: "review", label: "Kiểm tra các khoản thanh toán", icon: ClipboardCheck, component: ReportPaymentReview },
 ];
 const ReportApprovedView = () => {
     const [activeTab, setActiveTab] = useState("pending");

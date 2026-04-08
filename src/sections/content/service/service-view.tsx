@@ -26,9 +26,6 @@ const ServiceView = () => {
     const [activeTab, setActiveTab] = useState("suggest");
     const { showToast } = useToastStore()
     const [filters, setFilters] = useState({
-        page: "1",
-        limit: "50",
-        sort_feild: "timestamp",
         startTime: "",
         endTime: "",
         search: "",
@@ -57,7 +54,6 @@ const ServiceView = () => {
         setFilters((prev) => ({
             ...prev,
             [key]: String(newValue),
-            page: "1",
         }));
     };
 
@@ -67,9 +63,6 @@ const ServiceView = () => {
 
     const handleReset = () => {
         const defaultFilters = {
-            page: "1",
-            limit: "50",
-            sort_feild: "timestamp",
             startTime: "",
             endTime: "",
             search: "",
@@ -115,7 +108,7 @@ const ServiceView = () => {
                 />
                 <PrimaryButton
                     text="Export Excel"
-                    onClick={() => showToast("info","Sắp ra mắt")}
+                    onClick={() => showToast("info", "Sắp ra mắt")}
                     className="bg-gray-200 hover:bg-gray-300 text-black rounded-lg px-4 py-2 text-sm w-fit"
                     prefixIcon={<FileDown size={18} />}
                 />

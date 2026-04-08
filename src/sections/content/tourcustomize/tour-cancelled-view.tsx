@@ -12,8 +12,6 @@ import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 
 const TourCancelledView = () => {
     const [filters, setFilters] = useState({
-        page: String(1),
-        limit: String(50),
         nameTour: "",
     });
 
@@ -78,8 +76,6 @@ const TourCancelledView = () => {
 
     const handleReset = () => {
         setFilters({
-            page: "1",
-            limit: "50",
             nameTour: "",
         });
     };

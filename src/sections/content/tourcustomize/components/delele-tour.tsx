@@ -1,6 +1,6 @@
 import { useToastStore } from "@/zustand/useToastStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDelCompanyBankAccount } from "@/hooks/actions/useUser";
+import { useDelTourCustomized } from "@/hooks/actions/useUser";
 import PrimaryButton from "@/components/button/primary-button";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 
@@ -9,26 +9,26 @@ interface Props {
     onClose: () => void;
 }
 
-const DeleteAccountBank = ({ item, onClose }: Props) => {
+const DeleteTour = ({ item, onClose }: Props) => {
     const queryClient = useQueryClient();
     const { showToast } = useToastStore();
-    const { mutate: useDelCompanyBankAccountApi, isPending } = useMutation({
-        mutationFn: useDelCompanyBankAccount,
+    const { mutate: useDelTourCustomizedApi, isPending } = useMutation({
+        mutationFn: useDelTourCustomized,
     });
 
     const handleDelete = () => {
-        useDelCompanyBankAccountApi(
-            { strCompanyBankAccountGUID: item?.strCompanyBankAccountGUID },
+        useDelTourCustomizedApi(
+            { strTourCustomizedGUID: item?.strTourCustomizedGUID },
             {
                 onSuccess: () => {
                     queryClient.invalidateQueries({
-                        queryKey: [QUERY_KEYS.USER.LIST_COMPANY_BANK_ACCOUNT],
+                        queryKey: [QUERY_KEYS.USER.LIST_USER_IN_COMPANY_OWNER],
                     });
                     onClose();
-                    showToast("success", "Xóa tài khoản thành công");
+                    showToast("success", "Xóa tour thành công");
                 },
                 onError: () => {
-                    showToast("error", "Xóa tài khoản thất bại");
+                    showToast("error", "Xóa tour thất bại");
                 },
             }
         );
@@ -38,8 +38,8 @@ const DeleteAccountBank = ({ item, onClose }: Props) => {
         <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm space-y-6">
 
             <p className="text-gray-600">
-                Bạn có chắc chắn muốn xóa tài khoản{" "}
-                <span className="font-medium">{item?.strCompanyBankAccountName}</span>?
+                Bạn có chắc chắn muốn xóa tour{" "}
+                <span className="font-medium">{item?.strServiceName}</span>?
             </p>
 
             <div className="flex justify-between gap-2 pt-4">
@@ -60,4 +60,4 @@ const DeleteAccountBank = ({ item, onClose }: Props) => {
     );
 };
 
-export default DeleteAccountBank;
+export default DeleteTour;

@@ -1,9 +1,27 @@
 import { TableCore, type ColumnDef } from '@/components/table/table-core';
+import { QUERY_KEYS } from '@/hooks/actions/query-keys';
+import { useDetailBookingRequest } from '@/hooks/actions/useUser';
 import { useRouter } from '@/routes/hooks/use-router';
 import { paths } from '@/routes/paths';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Calendar, MessageSquare } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 const DetailRequest = () => {
+    const location = useLocation()
+
+    const item = location.state
+
+    const { data, isError, isLoading, refetch } = useQuery({
+        queryKey: [QUERY_KEYS.USER.LIST_BOOKING_REQUEST, 1],
+        queryFn: () =>
+            useDetailBookingRequest({
+                strBookingRequestGUID: item?.strBookingRequestGUID
+            }),
+        placeholderData: keepPreviousData,
+    });
+
+    console.log("data",data)
     const router = useRouter();
 
     const colDefs: ColumnDef<any>[] = [
@@ -57,10 +75,10 @@ const DetailRequest = () => {
             headerName: "Tổng giá",
             render: (value) => (
                 <div className="">
-                 {new Intl.NumberFormat('vi-VN').format(
-  Number.isFinite(Number(value)) ? Number(value) : 0
-)}{" "}
-<span className="text-[10px] align-top">đ</span>
+                    {new Intl.NumberFormat('vi-VN').format(
+                        Number.isFinite(Number(value)) ? Number(value) : 0
+                    )}{" "}
+                    <span className="text-[10px] align-top">đ</span>
                 </div>
             ),
         },

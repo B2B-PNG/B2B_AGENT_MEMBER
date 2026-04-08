@@ -15,29 +15,29 @@ import type { IReportPendingApproval } from "@/hooks/interfaces/user";
 const ReportPendingApproval = () => {
     const user = useUserStore((state) => state.user);
     const [filters, setFilters] = useState({
-        page: String(1),
-        limit: String(50),
         startTime: "",
         endTime: "",
         refund: "",
-        nameProvider: "",
+        nameGroup: "",
         idOrder: "",
     });
+
+    const [appliedFilters, setAppliedFilters] = useState(filters);
 
     const [page, setPage] = useState(1);
     const pageSize = 5;
     const { data, isLoading, isError } = useQuery({
-        queryKey: [QUERY_KEYS.USER.LIST_REPORT_COMMISSION_BY_AGENT_HOST, page],
+        queryKey: [QUERY_KEYS.USER.LIST_REPORT_COMMISSION_BY_AGENT_HOST, page, appliedFilters],
         queryFn: () =>
             useReportCommissionByAgentHost({
                 strPayableBookingItemGUID: null,
                 strFilterAgentName: null,
-                strFilterBookingCode: null,
-                strFilterGroupName: null,
-                dtmFilterDateFrom: null,
-                dtmFilterDateTo: null,
+                strFilterBookingCode: appliedFilters?.idOrder || null,
+                strFilterGroupName: appliedFilters?.nameGroup || null,
+                dtmFilterDateFrom: appliedFilters?.startTime || null,
+                dtmFilterDateTo: appliedFilters?.endTime || null,
+                intAgentHostPaymentTypeID: appliedFilters?.refund || null,
                 intPaymentStatusID: "2,3",
-                intAgentHostPaymentTypeID: null,
                 strPartnerCompanyGUID: user?.strCompanyGUID,
                 strPartnerMemberGUID: null,
                 strPaidBookingItemGUID: null,
@@ -59,46 +59,46 @@ const ReportPendingApproval = () => {
         }
     }, [totalPages]);
 
+    const handleSearch = () => {
+        setAppliedFilters(filters)
+        setPage(1)
+    };
+
+    const handleReset = () => {
+        const defaultFilters = {
+            startTime: "",
+            endTime: "",
+            refund: "",
+            nameGroup: "",
+            idOrder: "",
+        };
+
+        setFilters(defaultFilters);
+        setAppliedFilters(defaultFilters);
+        setPage(1);
+    };
+
     const onChangeFilters = (key: string, value: string | number) => {
-        let newValue = value;
+        let newValue: string | number = value;
 
-        if (key === "startTime" && value) {
+        if ((key === "startTime" || key === "endTime") && value) {
             const date = new Date(Number(value));
-            date.setUTCHours(0, 0, 0, 0);
-            newValue = date.getTime();
-        }
 
-        if (key === "endTime" && value) {
-            const date = new Date(Number(value));
-            date.setUTCHours(23, 59, 59, 999);
-            newValue = date.getTime();
+            if (key === "startTime") {
+                date.setUTCHours(0, 0, 0, 0);
+            } else {
+                date.setUTCHours(23, 59, 59, 999);
+            }
+
+            newValue = date.toISOString();
         }
 
         setFilters((prev) => ({
             ...prev,
             [key]: String(newValue),
-            page: String(1),
         }));
     };
 
-    const handleSearch = () => {
-        setFilters((prev) => ({
-            ...prev,
-            page: "1",
-        }));
-    };
-
-    const handleReset = () => {
-        setFilters({
-            page: "1",
-            limit: "50",
-            startTime: "",
-            endTime: "",
-            refund: "",
-            nameProvider: "",
-            idOrder: ""
-        });
-    };
 
     const colDefs: ColumnDef<IReportPendingApproval>[] = [
         {
@@ -231,16 +231,16 @@ const ReportPendingApproval = () => {
                         value: filters.idOrder,
                         placeHoder: "Mã đặt",
                     }, {
-                        keySearch: "nameProvider",
-                        value: filters.nameProvider,
+                        keySearch: "nameGroup",
+                        value: filters.nameGroup,
                         placeHoder: "Tên đại lý",
                     },
                 ]}
                 time={{
                     keyStartTime: "startTime",
                     keyendTime: "endTime",
-                    startTime: Number(filters.startTime),
-                    endTime: Number(filters.endTime),
+                    startTime: filters.startTime ? new Date(filters.startTime).getTime() : 0,
+                    endTime: filters.endTime ? new Date(filters.endTime).getTime() : 0,
                 }}
 
             />

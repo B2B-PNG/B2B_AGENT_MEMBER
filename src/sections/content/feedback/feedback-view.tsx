@@ -15,17 +15,17 @@ import type { IFeedBack } from "@/hooks/interfaces/user";
 const FeedbackView = () => {
 
     const [filters, setFilters] = useState({
-        page: String(1),
-        limit: String(50),
         startTime: "",
         endTime: "",
         state: "",
     });
+
+    const [appliedFilters, setAppliedFilters] = useState(filters);
     const user = useUserStore((state) => state.user);
     const [page, setPage] = useState(1);
     const pageSize = 5;
     const { data, isLoading, isError } = useQuery({
-        queryKey: [QUERY_KEYS.USER.LIST_AGENT_REQUEST, page],
+        queryKey: [QUERY_KEYS.USER.LIST_AGENT_REQUEST, page, appliedFilters],
         queryFn: () =>
             useListAgentRequest({
                 strAgentRequestGUID: null,
@@ -132,16 +132,12 @@ const FeedbackView = () => {
     };
 
     const handleSearch = () => {
-        setFilters((prev) => ({
-            ...prev,
-            page: "1",
-        }));
+        setPage(1);
+        setAppliedFilters(filters);
     };
 
     const handleReset = () => {
         setFilters({
-            page: "1",
-            limit: "50",
             startTime: "",
             endTime: "",
             state: "",

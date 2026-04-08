@@ -119,10 +119,6 @@ const BankAccount = () => {
         }
     }, [totalPages]);
 
-
-
-
-
     const colDefs: ColumnDef<ICompanyBankAccount>[] = [
         {
             field: "No",

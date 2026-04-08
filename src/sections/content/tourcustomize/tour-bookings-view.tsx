@@ -1,6 +1,6 @@
 import PrimaryButton from "@/components/button/primary-button";
 import CustomFilter from "@/components/form/custom-filter"
-import { Building2, Calendar, CheckCircle2, Edit3, RotateCcw, Search, Trash2, Users, XCircle } from "lucide-react";
+import { Building2, Calendar, CheckCircle2, Copy, Edit3, RotateCcw, Search, Trash2, Users, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { TableCore, type ColumnDef } from "@/components/table/table-core";
 import Pagination from "@/components/pagination/pagination";
@@ -9,22 +9,23 @@ import type { ITourProposalsProps } from "@/hooks/interfaces/user";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useListTourCustomized } from "@/hooks/actions/useUser";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
+import { useToastStore } from "@/zustand/useToastStore";
 
 const TourBookingsView = () => {
+    const { showToast } = useToastStore()
     const [filters, setFilters] = useState({
-        page: String(1),
-        limit: String(50),
         nameTour: "",
     });
 
+    const [appliedFilters, setAppliedFilters] = useState(filters);
     const [page, setPage] = useState(1);
     const pageSize = 5;
     const { data, isLoading, isError } = useQuery({
-        queryKey: [QUERY_KEYS.USER.LIST_USER_IN_COMPANY_OWNER, page],
+        queryKey: [QUERY_KEYS.USER.LIST_USER_IN_COMPANY_OWNER, page, appliedFilters],
         queryFn: () =>
             useListTourCustomized({
                 strTourCustomizedGUID: null,
-                strFilter: null,
+                strFilter: appliedFilters?.nameTour || null,
                 intTourStepID: 3,
                 strCodeChkVer: null,
                 intMemberTypeID: 1,
@@ -47,41 +48,27 @@ const TourBookingsView = () => {
     }, [totalPages]);
 
 
+    const handleSearch = () => {
+        setAppliedFilters(filters)
+        setPage(1)
+    };
+
+    const handleReset = () => {
+        const defaultFilters = {
+            nameTour: "",
+        };
+        setFilters(defaultFilters);
+        setAppliedFilters(defaultFilters);
+        setPage(1);
+    };
+
     const onChangeFilters = (key: string, value: string | number) => {
-        let newValue = value;
-
-        if (key === "startTime" && value) {
-            const date = new Date(Number(value));
-            date.setUTCHours(0, 0, 0, 0);
-            newValue = date.getTime();
-        }
-
-        if (key === "endTime" && value) {
-            const date = new Date(Number(value));
-            date.setUTCHours(23, 59, 59, 999);
-            newValue = date.getTime();
-        }
+        let newValue: string | number = value;
 
         setFilters((prev) => ({
             ...prev,
             [key]: String(newValue),
-            page: String(1),
         }));
-    };
-
-    const handleSearch = () => {
-        setFilters((prev) => ({
-            ...prev,
-            page: "1",
-        }));
-    };
-
-    const handleReset = () => {
-        setFilters({
-            page: "1",
-            limit: "50",
-            nameTour: "",
-        });
     };
 
 
@@ -195,22 +182,14 @@ const TourBookingsView = () => {
         {
             field: "No",
             headerName: "Thao tác",
-            render: (_, row) => (
+            render: (_) => (
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={() => console.log("Edit", row)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        onClick={() => showToast("info", "Sắp ra mắt")}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
                         title="Chỉnh sửa"
                     >
-                        <Edit3 size={18} />
-                    </button>
-
-                    <button
-                        onClick={() => console.log("Delete", row)}
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                        title="Xóa"
-                    >
-                        <Trash2 size={18} />
+                        <Copy size={18} />
                     </button>
                 </div>
             ),
@@ -225,7 +204,7 @@ const TourBookingsView = () => {
                     onChangeFilters={onChangeFilters}
                     search={[
                         {
-                            keySearch: "nameProvider",
+                            keySearch: "nameTour",
                             value: filters.nameTour,
                             placeHoder: "Tên đại lý",
                         },

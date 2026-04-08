@@ -13,12 +13,8 @@ import type { IReportRevenue } from "@/hooks/interfaces/user";
 import { fDateTime } from "@/utils/format-time";
 
 const ReportRevenue = () => {
-
     const user = useUserStore((state) => state.user);
-
     const [filters, setFilters] = useState({
-        page: String(1),
-        limit: String(50),
         startTime: "",
         endTime: "",
         nameProvider: "",
@@ -26,19 +22,21 @@ const ReportRevenue = () => {
         nameGroup: ""
     });
 
+    const [appliedFilters, setAppliedFilters] = useState(filters);
+
     const [page, setPage] = useState(1);
     const pageSize = 5;
     const { data, isLoading, isError } = useQuery({
-        queryKey: [QUERY_KEYS.USER.LIST_REPORT_RECEIV_ABLE_BY_AGENT, page],
+        queryKey: [QUERY_KEYS.USER.LIST_REPORT_RECEIV_ABLE_BY_AGENT, page, appliedFilters],
         queryFn: () =>
             useReportReceivableByAgent({
                 strCompanyGUID: user?.strCompanyGUID,
                 strPayableBookingItemGUID: null,
-                strFilterAgentHostName: null,
-                strFilterBookingCode: null,
-                strFilterGroupName: null,
-                dtmFilterDateFrom: null,
-                dtmFilterDateTo: null,
+                strFilterAgentHostName: appliedFilters?.nameProvider || null,
+                strFilterBookingCode: appliedFilters?.idOrder || null,
+                strFilterGroupName: appliedFilters?.nameGroup || null,
+                dtmFilterDateFrom: appliedFilters?.startTime || null,
+                dtmFilterDateTo: appliedFilters?.endTime || null,
                 intCurPage: page,
                 intPageSize: pageSize,
                 strOrder: null,
@@ -56,45 +54,44 @@ const ReportRevenue = () => {
         }
     }, [totalPages]);
 
-    const onChangeFilters = (key: string, value: string | number) => {
-        let newValue = value;
-
-        if (key === "startTime" && value) {
-            const date = new Date(Number(value));
-            date.setUTCHours(0, 0, 0, 0);
-            newValue = date.getTime();
-        }
-
-        if (key === "endTime" && value) {
-            const date = new Date(Number(value));
-            date.setUTCHours(23, 59, 59, 999);
-            newValue = date.getTime();
-        }
-
-        setFilters((prev) => ({
-            ...prev,
-            [key]: String(newValue),
-            page: String(1),
-        }));
-    };
-
     const handleSearch = () => {
-        setFilters((prev) => ({
-            ...prev,
-            page: "1",
-        }));
+        setAppliedFilters(filters)
+        setPage(1)
     };
 
     const handleReset = () => {
-        setFilters({
-            page: "1",
-            limit: "50",
+        const defaultFilters = {
             startTime: "",
             endTime: "",
             nameProvider: "",
             idOrder: "",
             nameGroup: ""
-        });
+        };
+
+        setFilters(defaultFilters);
+        setAppliedFilters(defaultFilters);
+        setPage(1);
+    };
+
+    const onChangeFilters = (key: string, value: string | number) => {
+        let newValue: string | number = value;
+
+        if ((key === "startTime" || key === "endTime") && value) {
+            const date = new Date(Number(value));
+
+            if (key === "startTime") {
+                date.setUTCHours(0, 0, 0, 0);
+            } else {
+                date.setUTCHours(23, 59, 59, 999);
+            }
+
+            newValue = date.toISOString();
+        }
+
+        setFilters((prev) => ({
+            ...prev,
+            [key]: String(newValue),
+        }));
     };
 
     const colDefs: ColumnDef<IReportRevenue>[] = [
@@ -204,16 +201,17 @@ const ReportRevenue = () => {
                 onChangeFilters={onChangeFilters}
                 search={[
                     {
-                        keySearch: "idRequest",
+                        keySearch: "nameProvider",
                         value: filters.nameProvider,
                         placeHoder: "Tên nhà cung cấp",
                     },
                     {
-                        keySearch: "idRequest",
+                        keySearch: "idOrder",
                         value: filters.idOrder,
                         placeHoder: "Mã đặt",
-                    }, {
-                        keySearch: "idRequest",
+                    },
+                    {
+                        keySearch: "nameGroup",
                         value: filters.nameGroup,
                         placeHoder: "Tên Nhóm",
                     },
@@ -221,10 +219,9 @@ const ReportRevenue = () => {
                 time={{
                     keyStartTime: "startTime",
                     keyendTime: "endTime",
-                    startTime: Number(filters.startTime),
-                    endTime: Number(filters.endTime),
+                    startTime: filters.startTime ? new Date(filters.startTime).getTime() : 0,
+                    endTime: filters.endTime ? new Date(filters.endTime).getTime() : 0,
                 }}
-
             />
 
             <div className="flex items-end justify-between">

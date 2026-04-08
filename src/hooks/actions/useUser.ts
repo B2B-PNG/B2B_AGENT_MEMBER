@@ -196,3 +196,17 @@ export const useAddSaleRequest = async (body: any) => {
     );
     return res.data;
 };
+export const useDelTourCustomized = async (body: any) => {
+    const res = await apiClient.post(
+        "tourcustomized/DelTourCustomized",
+        body
+    );
+    return res.data;
+};
+export const useDetailBookingRequest = async (body: any) => {
+    const res = await apiClient.post(
+        "request/GetDetailBookingRequest",
+        body
+    );
+    return res.data;
+};

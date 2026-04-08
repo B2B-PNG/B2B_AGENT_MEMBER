@@ -7,10 +7,11 @@ import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useListPaidBookingItem } from "@/hooks/actions/useUser";
 import { useUserStore } from "@/zustand/useUserStore";
 import type { IReportPayReview } from "@/hooks/interfaces/user";
+import { useToastStore } from "@/zustand/useToastStore";
 
 const ReportPaymentReview = () => {
     const user = useUserStore((state) => state.user);
-
+    const { showToast } = useToastStore()
     const [page, setPage] = useState(1);
     const pageSize = 5;
     const { data, isLoading, isError } = useQuery({
@@ -89,14 +90,11 @@ const ReportPaymentReview = () => {
             headerName: "Thao tác",
             render: () => (
                 <div className="flex items-center gap-2">
-                    <button className="p-1.5 hover:bg-blue-50 text-blue-600 rounded-full transition-colors" title="Chi tiết">
-                        <Eye size={16} />
-                    </button>
-                    <button className="p-1.5 hover:bg-gray-50 text-gray-600 rounded-full transition-colors" title="Chỉnh sửa">
-                        <Edit3 size={16} />
-                    </button>
-                    <button className="p-1.5 hover:bg-red-50 text-red-600 rounded-full transition-colors" title="Xóa">
-                        <Trash2 size={16} />
+                    <button
+                        onClick={() => showToast("info", "Sắp ra mắt")}
+                        className="cursor-pointer px-4 py-1.5 bg-[#004b91] text-white text-[13px] font-medium rounded hover:bg-[#003d76] transition-all shadow-sm"
+                    >
+                        Xác nhận
                     </button>
                 </div>
             ),
