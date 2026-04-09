@@ -210,3 +210,17 @@ export const useDetailBookingRequest = async (body: any) => {
     );
     return res.data;
 };
+export const useListRequestMessage = async (body: any) => {
+    const res = await apiClient.post(
+        "request/GetListRequestMessage",
+        body
+    );
+    return res.data;
+};
+export const useListServiceItemBySaleReq = async (body: any) => {
+    const res = await apiClient.post(
+        "request/GetListServiceItemBySaleReq",
+        body
+    );
+    return res.data;
+};

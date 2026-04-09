@@ -57,9 +57,9 @@ const RequestCustomizeNew = () => {
         {
             field: "strRequestCode",
             headerName: "Mã yêu cầu",
-            render: (value) => (
-                <button onClick={() => router.replaceParams(paths.content.detailRequestCustomize, {  })} className="cursor-pointer text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-100">
-                    {value || "---"}
+            render: (_, row) => (
+                <button onClick={() => router.replaceParams(paths.content.detailRequestCustomize, { item: row })} className="cursor-pointer text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-100">
+                    {row?.strRequestCode || "---"}
                 </button>
             )
         },
@@ -72,7 +72,7 @@ const RequestCustomizeNew = () => {
                     <div className="p-1.5 bg-gray-50 text-gray-500 rounded-md">
                         <ClipboardList size={14} />
                     </div>
-                    <span className="font-semibold text-gray-800 hover:text-[#004b91] cursor-pointer transition-colors">
+                    <span className="font-semibold text-gray-800 hover:text-[#004b91] transition-colors">
                         {value}
                     </span>
                 </div>

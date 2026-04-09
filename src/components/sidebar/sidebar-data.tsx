@@ -19,7 +19,13 @@ export const SIDEBAR_DATA = [
                     paths.content.detailRequest,
                 ]
             },
-            { title: "Yêu cầu Customize", path: paths.content.requestCustomize },
+            {
+                title: "Yêu cầu Customize", path: paths.content.requestCustomize,
+                matchPaths: [
+                    paths.content.requestCustomize,
+                    paths.content.detailRequestCustomize
+                ]
+            },
         ],
     },
     { title: "Danh sách báo giá", path: paths.content.quote, icon: Quote },

@@ -3,6 +3,8 @@ import { TableCore, type ColumnDef } from "@/components/table/table-core";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useListSaleRequest } from "@/hooks/actions/useUser";
 import type { ISaleRequest } from "@/hooks/interfaces/user";
+import { useRouter } from "@/routes/hooks/use-router";
+import { paths } from "@/routes/paths";
 import { fDateTime } from "@/utils/format-time";
 import { useUserStore } from "@/zustand/useUserStore";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -10,6 +12,7 @@ import { Building2, Calendar, ClipboardList } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const RequestCancel = () => {
+    const router = useRouter();
     const user = useUserStore((state) => state.user);
     const [page, setPage] = useState(1);
     const pageSize = 5;
@@ -51,10 +54,10 @@ const RequestCancel = () => {
         {
             field: "strRequestCode",
             headerName: "Mã yêu cầu",
-            render: (value) => (
-                <span className="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-100">
-                    {value || "---"}
-                </span>
+            render: (_, row) => (
+                <button onClick={() => router.replaceParams(paths.content.detailRequestCustomize, { item: row })} className="cursor-pointer text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-100">
+                    {row?.strRequestCode || "---"}
+                </button>
             )
         },
 

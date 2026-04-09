@@ -36,9 +36,9 @@ const SidebarItem = ({
 
     const isMatchPath = (path: string, matchPaths?: string[]) => {
         if (matchPaths && matchPaths.length > 0) {
-            return matchPaths.some(p => activePath.startsWith(p));
+            return matchPaths.includes(activePath);
         }
-        return activePath.startsWith(path);
+        return activePath === path;
     };
 
     const isParentActive =
@@ -56,7 +56,7 @@ const SidebarItem = ({
     useEffect(() => {
         if (
             item.children?.some((c: any) =>
-                activePath.startsWith(c.path)
+                isMatchPath(c.path, c.matchPaths)
             )
         ) {
             setIsOpen(true);
