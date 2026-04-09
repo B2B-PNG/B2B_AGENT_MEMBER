@@ -3,12 +3,15 @@ import { TableCore, type ColumnDef } from "@/components/table/table-core";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useListAgentForGroup } from "@/hooks/actions/useUser";
 import type { IQuoteGroup } from "@/hooks/interfaces/user";
+import { useRouter } from "@/routes/hooks/use-router";
+import { paths } from "@/routes/paths";
 import { useUserStore } from "@/zustand/useUserStore";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { FolderOpen, User, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const QuoteView = () => {
+    const router = useRouter()
     const user = useUserStore((state) => state.user);
     const [page, setPage] = useState(1);
     const pageSize = 5;
@@ -57,14 +60,13 @@ const QuoteView = () => {
         {
             field: "strAgentGroupName",
             headerName: "Tên nhóm",
-            render: (value) => (
-                <div className="flex items-center gap-2 text-gray-700 min-w-[180px] font-semibold">
+            render: (_, row) => (
+                <button onClick={() => router.replaceParams(paths.content.detaiQuote, { item: row })} className="cursor-pointer flex items-center gap-2 text-gray-700 min-w-[180px] font-semibold">
                     <FolderOpen size={16} className="text-blue-400" />
-                    <span className="text-sm">{value}</span>
-                </div>
+                    <span className="text-sm">{row?.strAgentGroupName}</span>
+                </button>
             )
         },
-
         {
             field: "strCustomerName",
             headerName: "Tên khách hàng",

@@ -28,8 +28,20 @@ export const SIDEBAR_DATA = [
             },
         ],
     },
-    { title: "Danh sách báo giá", path: paths.content.quote, icon: Quote },
-    { title: "Danh sách Đặt DV", path: paths.content.service, icon: Package },
+    {
+        title: "Danh sách báo giá", path: paths.content.quote, icon: Quote,
+        matchPaths: [
+            paths.content.quote,
+            paths.content.detaiQuote,
+        ]
+    },
+    {
+        title: "Danh sách Đặt DV", path: paths.content.service, icon: Package,
+        matchPaths: [
+            paths.content.service,
+            paths.content.detailService,
+        ]
+    },
     { title: "Danh sách phản hồi", path: paths.content.feedback, icon: MessageSquare },
     { title: "Kênh giá", path: paths.content.pricing, icon: Tag },
     { title: "Báo cáo khoản thu chi", path: paths.content.reportFinance, icon: BarChart3 },

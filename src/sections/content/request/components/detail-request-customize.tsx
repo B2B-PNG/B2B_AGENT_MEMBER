@@ -15,15 +15,17 @@ const DetailRequestCustomize = () => {
     const location = useLocation();
     const item = location.state?.item; console.log("itemahaha", item)
 
-    // intRequestStatusID: 4
-    // strStatusName: "Cancellation Request"
-
-
     const { data, isLoading, isError } = useQuery({
         queryKey: [QUERY_KEYS.USER.LIST_REQUEST_MESSAGE],
         queryFn: () =>
             useListRequestMessage({
-                strSaleRequestGUID: item?.strSaleRequestGUID
+                strRequestMessageGUID: null,
+                strRequestCode: item?.strRequestCode,
+                strSaleRequestGUID: item?.strSaleRequestGUID,
+                strOrder: null,
+                intCurPage: null,
+                intPageSize: null,
+                tblsReturn: "[0]"
             }),
         placeholderData: keepPreviousData,
     });

@@ -72,7 +72,7 @@ const RequestCustomizeNew = () => {
                     <div className="p-1.5 bg-gray-50 text-gray-500 rounded-md">
                         <ClipboardList size={14} />
                     </div>
-                    <span className="font-semibold text-gray-800 hover:text-[#004b91] transition-colors">
+                    <span className="font-semibold text-gray-800 transition-colors">
                         {value}
                     </span>
                 </div>

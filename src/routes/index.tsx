@@ -10,8 +10,9 @@ const Page404Page = lazy(() => import("@/pages/error/page404"));
 const RequestBookingPage = lazy(() => import("@/pages/content/request-booking"));
 const DetailRequestPage = lazy(() => import("@/pages/content/detail-request"));
 const RequestCustomizePage = lazy(() => import("@/pages/content/request-customize"));
-const DetailRequestCustomizePage = lazy(() => import("@/pages/content/detail-request-customize"));File
+const DetailRequestCustomizePage = lazy(() => import("@/pages/content/detail-request-customize"));
 const QuotePage = lazy(() => import("@/pages/content/quote"));
+const DetailQuotePage = lazy(() => import("@/pages/content/detail-quote"));
 const ServicePage = lazy(() => import("@/pages/content/service"));
 const DetailServicePage = lazy(() => import("@/pages/content/detail-service"));
 const FeedbackPage = lazy(() => import("@/pages/content/feedback"));
@@ -74,6 +75,10 @@ export function Router() {
             {
               path: paths.content.quote,
               element: <QuotePage />,
+            },
+            {
+              path: paths.content.detaiQuote,
+              element: <DetailQuotePage />,
             },
             {
               path: paths.content.service,
@@ -141,7 +146,7 @@ export function Router() {
               <InitLayout type={LAYOUT.OVERLAY}>
                 <Outlet />
               </InitLayout>
-            </AuthRoute>
+            </AuthRoute >
           ),
           children: [
             {
