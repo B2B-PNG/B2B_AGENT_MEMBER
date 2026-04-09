@@ -1,32 +1,36 @@
+import { QUERY_KEYS } from "@/hooks/actions/query-keys";
+import { useListAgentNotify } from "@/hooks/actions/useUser";
 import { useRouter } from "@/routes/hooks/use-router";
 import { paths } from "@/routes/paths";
+import { fDateTime } from "@/utils/format-time";
+import { useUserStore } from "@/zustand/useUserStore";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Calendar } from "lucide-react";
+import { useState } from "react";
 
 const NotificationPopup = () => {
     const router = useRouter()
-    const notifications = [
-        {
-            id: 1,
-            title: "Xác nhận Booking",
-            content: "Booking 2C8F14C đã được Agent Host xác nhận thành công.",
-            date: "02/04/2026 - 10:30",
-            isRead: false,
-        },
-        {
-            id: 2,
-            title: "Cập nhật giá Tour",
-            content: "Tour Hà Nội - Hạ Long vừa có thay đổi về tổng giá dịch vụ.",
-            date: "01/04/2026 - 15:45",
-            isRead: true,
-        },
-        {
-            id: 3,
-            title: "Nhắc nhở Deadline",
-            content: "Sắp đến hạn thanh toán cho dịch vụ Tour Phú Quốc.",
-            date: "31/03/2026 - 09:00",
-            isRead: true,
-        },
-    ];
+    const user = useUserStore((state) => state.user);
+    const [page] = useState(1);
+    const pageSize = 3;
+    const { data, isLoading, isError } = useQuery({
+        queryKey: [QUERY_KEYS.USER.LIST_AGENT_NOTIFY],
+        queryFn: () =>
+            useListAgentNotify({
+                strCompanyGUID: user?.strCompanyGUID,
+                strMemberGUID: null,
+                strPassengerGUID: null,
+                strGuideGUID: null,
+                intLangID: user?.intLangID,
+                intCurPage: page,
+                intPageSize: pageSize,
+                strOrder: null,
+                tblsReturn: "[0]"
+            }),
+        placeholderData: keepPreviousData,
+    });
+
+    const listData = data?.[0] ?? []
 
     return (
         <div className="relative">
@@ -35,11 +39,42 @@ const NotificationPopup = () => {
 
                     <div className="px-3 py-2 mb-1 flex justify-between items-center">
                         <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Thông báo</span>
-                        <span className="text-[10px] text-blue-500 hover:underline cursor-pointer">Đánh dấu đã đọc</span>
                     </div>
 
                     <div className="max-h-100 overflow-y-auto custom-scrollbar">
-                        {notifications.map((item) => (
+
+                        {isLoading && (
+                            <div className="space-y-2 p-2 animate-pulse">
+                                {[...Array(3)].map((_, i) => (
+                                    <div key={i} className="p-3 rounded-xl border border-gray-100">
+                                        <div className="flex gap-3">
+                                            <div className="mt-2 h-2 w-2 rounded-full bg-gray-200" />
+                                            <div className="flex-1 space-y-2">
+                                                <div className="h-3 w-2/3 bg-gray-200 rounded" />
+                                                <div className="h-3 w-full bg-gray-200 rounded" />
+                                                <div className="h-2 w-1/3 bg-gray-200 rounded" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {isError && (
+                            <div className="flex flex-col items-center justify-center py-10 text-center">
+
+                                <span className="text-xs text-gray-500">Không tải được thông báo</span>
+
+                                <button
+                                    onClick={() => window.location.reload()}
+                                    className="mt-4 px-2 py-1.5 text-[10px] bg-[#004b91] text-white rounded-md hover:bg-[#003d75] transition cursor-pointer"
+                                >
+                                    Thử lại
+                                </button>
+                            </div>
+                        )}
+
+                        {!isLoading && !isError && listData.map((item: any) => (
                             <button
                                 key={item.id}
                                 onClick={() => router.push(paths.overlay.notification)}
@@ -50,22 +85,23 @@ const NotificationPopup = () => {
 
                                     <div className="space-y-1">
                                         <div className="text-start text-[13px] font-semibold text-gray-700 leading-none group-hover:text-[#004b91]">
-                                            {item.title}
+                                            {item?.strAgentNotifyTitle}
                                         </div>
                                         <p className="text-start text-[12px] text-gray-500 leading-snug line-clamp-2 font-normal">
-                                            {item.content}
+                                            {item?.strAgentNotifyContent}
                                         </p>
                                         <div className="flex items-center gap-1.5 text-[10px] text-gray-400">
                                             <Calendar size={12} />
-                                            <span>{item.date}</span>
+                                            <span>{fDateTime(item?.dtmCreatedDateAgentNotifyTo)}</span>
                                         </div>
                                     </div>
                                 </div>
                             </button>
                         ))}
+
                     </div>
 
-                    <button onClick={() => router.push(paths.overlay.notification)} className="p-2 border-t border-gray-50 mt-1 w-full py-2 text-[12px] text-gray-500 hover:text-[#004b91] hover:bg-gray-50 rounded-lg transition-colors font-medium">
+                    <button onClick={() => router.push(paths.overlay.notification)} className="cursor-pointer p-2 border-t border-gray-50 mt-1 w-full py-2 text-[12px] text-gray-500 hover:text-[#004b91] hover:bg-gray-50 rounded-lg transition-colors font-medium">
                         Xem tất cả thông báo
                     </button>
 

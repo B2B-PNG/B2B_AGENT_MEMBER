@@ -1,11 +1,11 @@
 import { TableCore, type ColumnDef } from '@/components/table/table-core';
 import { paths } from '@/routes/paths';
-import { AlertCircle, ArrowLeft, Calendar, CheckCircle2, Edit3, Trash2, XCircle } from 'lucide-react';
+import { ArrowLeft, Calendar, CheckCircle2, Edit3, Trash2, XCircle } from 'lucide-react';
 import { fDateTime } from '@/utils/format-time';
 import { useLocation } from 'react-router-dom';
 import { useUserStore } from '@/zustand/useUserStore';
 import { QUERY_KEYS } from '@/hooks/actions/query-keys';
-import { useListAgentForGroup, useListAgentHostServiceItem } from '@/hooks/actions/useUser';
+import { useListAgentForGroup } from '@/hooks/actions/useUser';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useToastStore } from '@/zustand/useToastStore';
 import { useRouter } from '@/routes/hooks/use-router';
@@ -15,7 +15,6 @@ const DetailQuote = () => {
     const location = useLocation()
     const item = location.state.item
     const router = useRouter();
-    console.log("item", item)
     const user = useUserStore((state) => state.user);
 
     const { data, isLoading } = useQuery({
@@ -36,7 +35,6 @@ const DetailQuote = () => {
 
     const listData = data?.[1] ?? []
 
-    console.log("listData", listData)
     const colDefs: ColumnDef<any>[] = [
         {
             field: "stt",

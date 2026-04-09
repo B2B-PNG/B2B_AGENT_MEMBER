@@ -130,7 +130,7 @@ const ServiceBooked = ({ appliedFilters }: Props) => {
             field: "strBookingSubStatusName",
             headerName: "Trạng thái",
             render: (value) => (
-                <span className="text-xs text-gray-700 whitespace-nowrap">{value || "New Booking"}</span>
+                <span className="text-xs text-gray-700 whitespace-nowrap">{value}</span>
             )
         },
         {

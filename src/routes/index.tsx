@@ -18,6 +18,7 @@ const DetailServicePage = lazy(() => import("@/pages/content/detail-service"));
 const FeedbackPage = lazy(() => import("@/pages/content/feedback"));
 const PricingPage = lazy(() => import("@/pages/content/pricing"));
 const ReportsFinancePage = lazy(() => import("@/pages/content/report-finance"));
+const DetailReportsFinancePage = lazy(() => import("@/pages/content/detail-report-finance"));
 const ReportApprovedPage = lazy(() => import("@/pages/content/report-approved"));
 const AgentPage = lazy(() => import("@/pages/content/agent"));
 const TourBookingsPage = lazy(() => import("@/pages/content/tour-bookings"));
@@ -99,6 +100,10 @@ export function Router() {
             {
               path: paths.content.reportFinance,
               element: <ReportsFinancePage />,
+            },
+            {
+              path: paths.content.detailReportFinance,
+              element: <DetailReportsFinancePage />,
             },
             {
               path: paths.content.reportApproved,

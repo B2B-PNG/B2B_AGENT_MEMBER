@@ -11,8 +11,11 @@ import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useUserStore } from "@/zustand/useUserStore";
 import type { IReportCommission } from "@/hooks/interfaces/user";
 import { fDateTime } from "@/utils/format-time";
+import { paths } from "@/routes/paths";
+import { useRouter } from "@/routes/hooks/use-router";
 
 const ReportCommission = () => {
+    const router = useRouter();
     const user = useUserStore((state) => state.user);
     const [filters, setFilters] = useState({
         startTime: "",
@@ -119,9 +122,9 @@ const ReportCommission = () => {
             headerName: "Mã Booking/Tên nhóm",
             render: (_, row) => (
                 <div className="min-w-45">
-                    <div className="text-[#004b91] font-medium text-sm hover:underline cursor-pointer">
+                    <button onClick={() => router.replaceParams(paths.content.detailReportFinance, { item: row })} className="text-[#004b91] font-medium text-sm hover:underline cursor-pointer">
                         {row.strOrderAgentHostCode}
-                    </div>
+                    </button>
                     <div className="flex items-center gap-1.5 text-gray-500 text-[11px] mt-1">
                         <FolderOpen size={12} className="text-blue-400" />
                         {row.strGroupName}

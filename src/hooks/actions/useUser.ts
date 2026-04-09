@@ -224,3 +224,24 @@ export const useListServiceItemBySaleReq = async (body: any) => {
     );
     return res.data;
 };
+export const useListBooking = async (body: any) => {
+    const res = await apiClient.post(
+        "public/GetListBooking",
+        body
+    );
+    return res.data;
+};
+export const useHelperFileByShow = async (body: any) => {
+    const res = await apiClient.post(
+        "travelhelper/GetDetailTravelB2BHelperFileByShow",
+        body
+    );
+    return res.data;
+};
+export const useListAgentNotify = async (body: any) => {
+    const res = await apiClient.post(
+        "notify/GetListAgentNotify",
+        body
+    );
+    return res.data;
+};
