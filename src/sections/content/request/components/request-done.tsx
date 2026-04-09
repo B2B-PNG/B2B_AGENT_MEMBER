@@ -16,17 +16,18 @@ const RequestDone = () => {
   const [filters, setFilters] = useState({
     idRequest: ""
   });
+  const [appliedFilters, setAppliedFilters] = useState(filters);
   const user = useUserStore((state) => state.user);
   const [page, setPage] = useState(1);
   const pageSize = 5;
   const { data, isError, isLoading } = useQuery({
-    queryKey: [QUERY_KEYS.USER.LIST_BOOKING_REQUEST, page],
+    queryKey: [QUERY_KEYS.USER.LIST_BOOKING_REQUEST, page, appliedFilters],
     queryFn: () =>
       useListBookingRequest({
         strBookingRequestGUID: null,
         strCompanyGUID: user?.strCompanyGUID,
         strListRequestProcessID: "3,4",
-        strFilterBookingRequestCode: null,
+        strFilterBookingRequestCode: appliedFilters?.idRequest || null,
         IsAgent: true,
         strOrder: null,
         intCurPage: page,
@@ -47,17 +48,22 @@ const RequestDone = () => {
   }, [totalPages]);
 
   const handleSearch = () => {
-    console.log("Searching for");
+    setAppliedFilters(filters)
+    setPage(1)
   };
 
   const handleReset = () => {
-    setFilters({
+    const defaultFilters = {
       idRequest: "",
-    });
+    };
+
+    setFilters(defaultFilters);
+    setAppliedFilters(defaultFilters);
+    setPage(1);
   };
 
   const onChangeFilters = (key: string, value: string | number) => {
-    let newValue = value;
+    let newValue: string | number = value;
 
     setFilters((prev) => ({
       ...prev,
@@ -159,7 +165,7 @@ const RequestDone = () => {
                     <Flag size={18} fill="currentColor" />
 
                     <button
-                      onClick={() => router.push(paths.content.detailRequest)}
+                      onClick={() => router.replaceParams(paths.content.detailRequest, { strBookingRequestGUID: header?.strBookingRequestGUID })}
                       className="uppercase tracking-wide cursor-pointer hover:underline decoration-blue-200 underline-offset-4"
                     >
                       {header.strCompanyName}

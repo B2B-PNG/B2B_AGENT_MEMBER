@@ -8,12 +8,15 @@ import { fDateTime } from "@/utils/format-time";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useListTourCustomized } from "@/hooks/actions/useUser";
-import type { ITourProposalsProps } from "@/hooks/interfaces/user";
+import type { ITourCustomized } from "@/hooks/interfaces/user";
 import { useToastStore } from "@/zustand/useToastStore";
 import PanelPopup from "@/components/popup/panel-popup";
 import DeleteTour from "./components/delele-tour";
+import { paths } from "@/routes/paths";
+import { useRouter } from "@/routes/hooks/use-router";
 
 const TourProposalsView = () => {
+    const router = useRouter()
     const { showToast } = useToastStore()
     const [filters, setFilters] = useState({
         nameTour: "",
@@ -23,7 +26,7 @@ const TourProposalsView = () => {
     })
 
     const [appliedFilters, setAppliedFilters] = useState(filters);
-    const [item, setItem] = useState<ITourProposalsProps | null>(null);
+    const [item, setItem] = useState<ITourCustomized | null>(null);
     const [page, setPage] = useState(1);
     const pageSize = 5;
     const { data, isLoading, isError } = useQuery({
@@ -78,7 +81,7 @@ const TourProposalsView = () => {
     };
 
 
-    const colDefs: ColumnDef<ITourProposalsProps>[] = [
+    const colDefs: ColumnDef<ITourCustomized>[] = [
         {
             field: "No",
             headerName: "STT",
@@ -99,24 +102,24 @@ const TourProposalsView = () => {
             field: "strServiceName",
             headerName: "Tên dịch vụ",
             render: (_, row) => (
-                <div className="space-y-0.5 py-1 min-w-[200px] text-xs flex justify-center">
+                <button onClick={() => router.push(paths.content.detailTour)} className="space-y-0.5 py-1 min-w-[200px] text-xs flex justify-center cursor-pointer">
                     <div className="flex items-center gap-2 text-[#004b91] font-semibold text-sm">
                         <Building2 size={14} className="text-[#4e6d9a]" />
                         <span className="uppercase tracking-tight">
                             {row?.strServiceName ?? "---"}
                         </span>
                     </div>
-                </div>
+                </button>
             ),
         },
         {
             field: "No",
             headerName: "Ngày",
             render: (_, row) => (
-                <div className="text-xs text-gray-500 flex items-center gap-1.5 min-w-[240px]">
+                <div className="text-xs text-gray-500 flex items-center gap-1.5 min-w-[320px]">
                     <Calendar size={13} className="text-gray-400" />
                     <span>
-                        {row?.dtmDateFrom ?? "---"} - {row?.dtmDateTo ?? "---"}
+                        {fDateTime(row?.dtmDateFrom) ?? "---"} - {fDateTime(row?.dtmDateTo) ?? "---"}
                     </span>
                 </div>
             ),
@@ -156,7 +159,7 @@ const TourProposalsView = () => {
             field: "dblTotalCostPrice",
             headerName: "Tổng giá",
             render: (value) => (
-                <div className="">
+                <div className="min-w-[100px]">
                     {value
                         ? new Intl.NumberFormat("vi-VN").format(value)
                         : "0"}{" "}
@@ -168,7 +171,7 @@ const TourProposalsView = () => {
             field: "dtmCreatedDate",
             headerName: "Ngày tạo",
             render: (value) => (
-                <div className="text-xs text-gray-500 flex items-center gap-1.5">
+                <div className="text-xs text-gray-500 flex items-center gap-1.5 min-w-[170px]">
                     <Calendar size={13} className="text-gray-400" />
                     {value ? fDateTime(value) : "---"}
                 </div>

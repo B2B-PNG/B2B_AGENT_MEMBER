@@ -13,8 +13,10 @@ import { QUERY_KEYS } from '@/hooks/actions/query-keys';
 import { useListAgentHostServiceItem } from '@/hooks/actions/useUser';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import type { IServiceDetailTable } from '@/hooks/interfaces/user';
+import { useToastStore } from '@/zustand/useToastStore';
 
 const DetailService = () => {
+    const { showToast } = useToastStore()
     const location = useLocation()
     const item = location.state.item
     const router = useRouter();
@@ -112,17 +114,17 @@ const DetailService = () => {
         {
             field: "dblPrice",
             headerName: "Thao tác",
-            render: (_, row) => (
+            render: (_) => (
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={() => console.log('Edit', row)}
+                        onClick={() => showToast("info", "Sắp ra mắt")}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Chỉnh sửa"
                     >
                         <Edit3 size={18} />
                     </button>
                     <button
-                        onClick={() => console.log('Delete', row)}
+                        onClick={() => showToast("info", "Sắp ra mắt")}
                         className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                         title="Xóa"
                     >
@@ -223,6 +225,15 @@ const DetailService = () => {
                     />
                 </div>
 
+                <div className="flex justify-end pt-4">
+                    <button
+                        onClick={() => showToast("info", "Sắp ra mắt")}
+                        className="cursor-pointer w-fit px-16 py-2.5 bg-[#004b91] hover:bg-[#003d75] rounded-lg text-white transition-colors disabled:opacity-50"
+                    >
+
+                        Hủy đặt dịch vụ
+                    </button>
+                </div>
             </div>
 
 

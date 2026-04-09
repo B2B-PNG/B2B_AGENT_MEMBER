@@ -23,7 +23,6 @@ const DetailRequest = () => {
 
     const listDataCompany = data?.[0]?.[0] ?? [];
     const listDataService = data?.[2] ?? [];
-console.log("first",listDataService)
     const colDefs: ColumnDef<any>[] = [
         {
             field: "stt",

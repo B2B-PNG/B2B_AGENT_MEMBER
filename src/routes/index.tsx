@@ -10,6 +10,7 @@ const Page404Page = lazy(() => import("@/pages/error/page404"));
 const RequestBookingPage = lazy(() => import("@/pages/content/request-booking"));
 const DetailRequestPage = lazy(() => import("@/pages/content/detail-request"));
 const RequestCustomizePage = lazy(() => import("@/pages/content/request-customize"));
+const DetailRequestCustomizePage = lazy(() => import("@/pages/content/detail-request-customize"));File
 const QuotePage = lazy(() => import("@/pages/content/quote"));
 const ServicePage = lazy(() => import("@/pages/content/service"));
 const DetailServicePage = lazy(() => import("@/pages/content/detail-service"));
@@ -65,6 +66,10 @@ export function Router() {
             {
               path: paths.content.requestCustomize,
               element: <RequestCustomizePage />,
+            },
+            {
+              path: paths.content.detailRequestCustomize,
+              element: <DetailRequestCustomizePage />,
             },
             {
               path: paths.content.quote,

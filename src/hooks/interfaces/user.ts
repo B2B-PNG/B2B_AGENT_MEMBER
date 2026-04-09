@@ -92,7 +92,7 @@ export interface IReportPendingApproval {
 }
 
 
-export interface ITourProposalsProps {
+export interface ITourCustomized {
   IsActive: boolean;
   IsEnable: boolean;
   IsLastVersion: boolean;

@@ -10,6 +10,7 @@ export const paths = {
     requestBooking: "/request-booking",
     detailRequest: "/detail-request",
     requestCustomize: "/request-customize",
+    detailRequestCustomize: "/detail-request-customize",
     quote: "/quote",
     service: "/service",
     detailService: "/detail-service",

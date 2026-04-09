@@ -16,17 +16,19 @@ const RequestNew = () => {
   const [filters, setFilters] = useState({
     idRequest: ""
   });
+
+  const [appliedFilters, setAppliedFilters] = useState(filters);
   const user = useUserStore((state) => state.user);
   const [page, setPage] = useState(1);
   const pageSize = 5;
-  const { data, isError, isLoading, refetch } = useQuery({
-    queryKey: [QUERY_KEYS.USER.LIST_BOOKING_REQUEST, page],
+  const { data, isError, isLoading } = useQuery({
+    queryKey: [QUERY_KEYS.USER.LIST_BOOKING_REQUEST, page, appliedFilters],
     queryFn: () =>
       useListBookingRequest({
         strBookingRequestGUID: null,
         strCompanyGUID: user?.strCompanyGUID,
         strListRequestProcessID: "1,2",
-        strFilterBookingRequestCode: filters.idRequest || null,
+        strFilterBookingRequestCode: appliedFilters?.idRequest || null,
         IsAgent: true,
         strOrder: null,
         intCurPage: page,
@@ -47,20 +49,22 @@ const RequestNew = () => {
   }, [totalPages]);
 
   const handleSearch = () => {
-    setPage(1);
-    refetch();
+    setAppliedFilters(filters)
+    setPage(1)
   };
 
   const handleReset = () => {
-    setFilters({
+    const defaultFilters = {
       idRequest: "",
-    });
+    };
+
+    setFilters(defaultFilters);
+    setAppliedFilters(defaultFilters);
     setPage(1);
-    refetch();
   };
 
   const onChangeFilters = (key: string, value: string | number) => {
-    let newValue = value;
+    let newValue: string | number = value;
 
     setFilters((prev) => ({
       ...prev,

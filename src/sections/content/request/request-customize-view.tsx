@@ -1,18 +1,18 @@
 import { TabsPills } from "@/components/tab/tabspills";
 import { useState } from "react";
 import { FilePlus, XCircle } from "lucide-react";
-import RequestCustomNew from "./components/request-custom-new";
+import RequestCustomizeNew from "./components/request-customize-new";
 import RequestCancel from "./components/request-cancel";
 
 const REQUEST_TABS = [
-    { id: "newRequest", label: "Yêu cầu mới", icon: FilePlus, component: RequestCustomNew },
+    { id: "newRequest", label: "Yêu cầu mới", icon: FilePlus, component: RequestCustomizeNew },
     { id: "cancel", label: "Yêu cầu bị hủy", icon: XCircle, component: RequestCancel },
 ];
 
 const RequestCustomizeView = () => {
     const [activeTab, setActiveTab] = useState("newRequest");
 
-    const ActiveComponent = REQUEST_TABS.find((tab) => tab.id === activeTab)?.component || RequestCustomNew;
+    const ActiveComponent = REQUEST_TABS.find((tab) => tab.id === activeTab)?.component || RequestCustomizeNew;
 
     return (
         <div className="space-y-6">

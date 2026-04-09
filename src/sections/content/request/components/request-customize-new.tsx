@@ -10,9 +10,12 @@ import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useListSaleRequest } from "@/hooks/actions/useUser";
 import { useUserStore } from "@/zustand/useUserStore";
 import type { ISaleRequest } from "@/hooks/interfaces/user";
+import { useRouter } from "@/routes/hooks/use-router";
+import { paths } from "@/routes/paths";
 
-const RequestCustomNew = () => {
+const RequestCustomizeNew = () => {
     const user = useUserStore((state) => state.user);
+    const router = useRouter()
     const [page, setPage] = useState(1);
     const pageSize = 5;
     const { data, isLoading, isError } = useQuery({
@@ -55,9 +58,9 @@ const RequestCustomNew = () => {
             field: "strRequestCode",
             headerName: "Mã yêu cầu",
             render: (value) => (
-                <span className="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-100">
+                <button onClick={() => router.replaceParams(paths.content.detailRequestCustomize, {  })} className="cursor-pointer text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded border border-gray-100">
                     {value || "---"}
-                </span>
+                </button>
             )
         },
 
@@ -154,4 +157,4 @@ const RequestCustomNew = () => {
     )
 }
 
-export default RequestCustomNew
+export default RequestCustomizeNew

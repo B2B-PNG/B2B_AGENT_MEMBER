@@ -10,16 +10,16 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z as zod } from "zod";
 import AuthBox from "./components/auth-box";
-import { useSearchParams } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
 // import { useToastStore } from "@/zustand/useToastStore";
 const SignUpView = () => {
   const { t } = useTranslation("auth");
   const { value: showPassword, onToggle } = useBoolean();
-  const [searchParams] = useSearchParams();
+  // const [searchParams] = useSearchParams();
   // const { showToast } = useToastStore()
-  const appId = searchParams.get("app_id") ?? "";
-  const challengeCode = searchParams.get("challenge_code") ?? "";
-  const state = searchParams.get("state") ?? "";
+  // const appId = searchParams.get("app_id") ?? "";
+  // const challengeCode = searchParams.get("challenge_code") ?? "";
+  // const state = searchParams.get("state") ?? "";
 
   // const { mutate: loginApi, isPending: isLoading } = useMutation({
   //   mutationFn: useLogin,
@@ -48,15 +48,13 @@ const SignUpView = () => {
   const { handleSubmit, formState } = methods;
   const { isValid } = formState;
 
-  const onSubmit = handleSubmit(async (data) => {
-    const payload = {
-      ...data,
-      appId,
-      challengeCode,
-      state,
-    };
-
-    console.log("payload:", payload);
+  const onSubmit = handleSubmit(async () => {
+    // const payload = {
+    //   ...data,
+    //   appId,
+    //   challengeCode,
+    //   state,
+    // };
 
     // loginApi(payload, {
     //   onSuccess: () => {
