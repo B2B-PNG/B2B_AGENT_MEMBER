@@ -5,10 +5,11 @@ import Lang from "../lang/lang";
 import Notification from "@/sections/overlay/notification/components/notification";
 import Cart from "@/sections/overlay/cart/components/cart";
 import { InfoPopup } from "./info-popup";
+import { useToastStore } from "@/zustand/useToastStore";
 
 const Header = () => {
   const router = useRouter();
-
+  const { showToast } = useToastStore()
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-2.5">
       <div className="max-w-360 mx-auto flex justify-between items-center">
@@ -34,7 +35,7 @@ const Header = () => {
             <Cart />
           </div>
 
-          <button className="cursor-pointer hidden lg:block bg-[#4a6fa5] hover:bg-[#3b5b7e] text-white px-5 py-2 rounded-full font-bold text-[13px] shadow-sm shadow-blue-200 transition-all active:scale-95 uppercase tracking-wide">
+          <button onClick={() => showToast("info", "Sắp ra mắt")} className="cursor-pointer hidden lg:block bg-[#4a6fa5] hover:bg-[#3b5b7e] text-white px-5 py-2 rounded-full font-bold text-[13px] shadow-sm shadow-blue-200 transition-all active:scale-95 uppercase tracking-wide">
             List Agent Host
           </button>
 
@@ -42,7 +43,7 @@ const Header = () => {
 
         </div>
       </div>
-    </header>
+    </header >
   );
 };
 

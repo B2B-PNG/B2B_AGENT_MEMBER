@@ -1,20 +1,21 @@
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
-import { useListAgentNotify } from "@/hooks/actions/useUser";
+import { useListAgentNotify, useUpdNotifyIsRead } from "@/hooks/actions/useUser";
 import { useRouter } from "@/routes/hooks/use-router";
 import { paths } from "@/routes/paths";
 import { fDateTime } from "@/utils/format-time";
 import { useUserStore } from "@/zustand/useUserStore";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Calendar } from "lucide-react";
 import { useState } from "react";
 
 const NotificationPopup = () => {
+    const queryClient = useQueryClient();
     const router = useRouter()
     const user = useUserStore((state) => state.user);
     const [page] = useState(1);
     const pageSize = 3;
     const { data, isLoading, isError } = useQuery({
-        queryKey: [QUERY_KEYS.USER.LIST_AGENT_NOTIFY],
+        queryKey: [QUERY_KEYS.USER.LIST_AGENT_NOTIFY, page, pageSize],
         queryFn: () =>
             useListAgentNotify({
                 strCompanyGUID: user?.strCompanyGUID,
@@ -31,6 +32,23 @@ const NotificationPopup = () => {
     });
 
     const listData = data?.[0] ?? []
+    const { mutate: useUpdNotifyIsReadApi } = useMutation({
+        mutationFn: useUpdNotifyIsRead,
+    });
+    const handleIsRead = (guid: string) => {
+        useUpdNotifyIsReadApi(
+            { strAgentNotifyToGUID: guid },
+            {
+                onSuccess: () => {
+                    queryClient.invalidateQueries({
+                        queryKey: [QUERY_KEYS.USER.LIST_AGENT_NOTIFY],
+                    });
+
+                    router.push(paths.overlay.notification);
+                },
+            }
+        );
+    };
 
     return (
         <div className="relative">
@@ -77,11 +95,11 @@ const NotificationPopup = () => {
                         {!isLoading && !isError && listData.map((item: any) => (
                             <button
                                 key={item.id}
-                                onClick={() => router.push(paths.overlay.notification)}
+                                onClick={() => handleIsRead(item?.strAgentNotifyToGUID)}
                                 className="group relative p-3 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer mb-0.5 border-b border-gray-50 last:border-0"
                             >
                                 <div className="flex gap-3">
-                                    <div className={`mt-1 h-2 w-2 rounded-full shrink-0 ${item.isRead ? 'bg-transparent' : 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]'}`} />
+                                    <div className={`mt-1 h-2 w-2 rounded-full shrink-0 ${item.IsRead ? 'bg-transparent' : 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]'}`} />
 
                                     <div className="space-y-1">
                                         <div className="text-start text-[13px] font-semibold text-gray-700 leading-none group-hover:text-[#004b91]">

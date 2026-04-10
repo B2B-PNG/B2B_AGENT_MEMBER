@@ -245,3 +245,10 @@ export const useListAgentNotify = async (body: any) => {
     );
     return res.data;
 };
+export const useUpdNotifyIsRead = async (body: any) => {
+    const res = await apiClient.post(
+        "notify/UpdAgentNotifyToForIsRead",
+        body
+    );
+    return res.data;
+};
