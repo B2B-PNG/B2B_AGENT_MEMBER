@@ -5,9 +5,16 @@ import Lang from "../lang/lang";
 import Notification from "@/sections/overlay/notification/components/notification";
 import Cart from "@/sections/overlay/cart/components/cart";
 import { InfoPopup } from "./info-popup";
+import { useUser } from "@/hooks/actions/useAuth";
+import { useIsLoggedIn, useUserStore } from "@/zustand/useUserStore";
+import { CONFIG } from "@/config-global";
 
 const Header = () => {
   const router = useRouter();
+  useUser();
+  const isLoggedIn = useIsLoggedIn();
+  const isLoading = useUserStore((state) => state.isLoading);
+
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-2.5">
       <div className="max-w-360 mx-auto flex justify-between items-center">
@@ -37,7 +44,16 @@ const Header = () => {
             List Agent Host
           </button>
 
-          <InfoPopup />
+          {
+            !isLoading && !isLoggedIn ? (
+              <button onClick={() => window.location.href = `${CONFIG.serverUrl}auth/login`} className="cursor-pointer hidden lg:block bg-[#4a6fa5] hover:bg-[#3b5b7e] text-white px-5 py-2 rounded-full font-bold text-[13px] shadow-sm shadow-blue-200 transition-all active:scale-95 uppercase tracking-wide">
+                Đăng nhập
+              </button>
+            )
+              : (
+                <InfoPopup />
+              )
+          }
 
         </div>
       </div>

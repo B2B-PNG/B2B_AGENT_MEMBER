@@ -3,7 +3,7 @@ import { Navigate, Outlet, useRoutes } from "react-router-dom";
 import { paths } from "./paths";
 import InitLayout, { LAYOUT } from "../layouts/init-layout";
 import { SplashScreen } from "@/components/loading";
-import { AuthRoute } from "./auth-route";
+// import { AuthRoute } from "./auth-route";
 const SignInPage = lazy(() => import("@/pages/auth/sign-in"));
 const InfoPage = lazy(() => import("@/pages/content/info"));
 const Page404Page = lazy(() => import("@/pages/error/page404"));
@@ -46,11 +46,11 @@ export function Router() {
         {
           element: (
             // <ProtectedRoute>
-            <AuthRoute>
+            // <AuthRoute>
               <InitLayout type={LAYOUT.MAIN}>
                 <Outlet />
               </InitLayout>
-            </AuthRoute>
+            // </AuthRoute>
             //  </ProtectedRoute>
           ),
           children: [
@@ -149,11 +149,11 @@ export function Router() {
         // OVERLAY LAYOUT
         {
           element: (
-            <AuthRoute>
+            // <AuthRoute>
               <InitLayout type={LAYOUT.OVERLAY}>
                 <Outlet />
               </InitLayout>
-            </AuthRoute >
+            // </AuthRoute >
           ),
           children: [
             {
