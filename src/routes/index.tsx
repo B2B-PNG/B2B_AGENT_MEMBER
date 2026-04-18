@@ -27,6 +27,7 @@ const TourProposalsPage = lazy(() => import("@/pages/content/tour-proposals"));
 const DetailTourPage = lazy(() => import("@/pages/content/detail-tour"));
 const NotificationPage = lazy(() => import("@/pages/overlay/notification"));
 const CartPage = lazy(() => import("@/pages/overlay/cart"));
+const AgentHostPage = lazy(() => import("@/pages/overlay/agent-host"));
 
 export function Router() {
   // const isLoading = true;
@@ -126,6 +127,7 @@ export function Router() {
               element: <TourProposalsPage />,
             },
 
+
           ],
         },
 
@@ -167,6 +169,11 @@ export function Router() {
             {
               path: paths.content.detailTour,
               element: <DetailTourPage />,
+            },
+
+            {
+              path: paths.content.agentHost,
+              element: <AgentHostPage />,
             },
           ],
         },

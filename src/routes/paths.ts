@@ -25,6 +25,7 @@ export const paths = {
     tourCancelled: "/tour-cancelled",
     tourProposals: "/tour-proposals",
     detailTour: "/detail-tour",
+    agentHost: "/agent-host",
   },
   overlay: {
     notification: "/notification",
