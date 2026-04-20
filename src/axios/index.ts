@@ -22,6 +22,10 @@ apiClient.interceptors.request.use(
 
     config.headers["Accept-Language"] = language;
 
+    if (config.data instanceof FormData) {
+      delete config.headers["Content-Type"];
+    }
+
     // if (token) {
     //   config.headers["Authorization"] = `Bearer ${token}`;
     // }

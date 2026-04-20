@@ -24,6 +24,7 @@ export interface IUser {
   strContactAddr: string;
 
   intMemberRoleID: number;
+  intSaluteID: number;
   intMemberTypeID: number;
   intCurrencyID: number;
   intLangID: number;

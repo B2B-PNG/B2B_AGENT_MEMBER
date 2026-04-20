@@ -1,16 +1,25 @@
 import { ArrowLeft, Calendar, ChevronDown, Copy, Edit3, MapPin, Play, Plus, Users, X } from "lucide-react";
 import UpdateTour from "./update-tour";
+import ChangeDayOrder from "./change-day-order";
 
 import { useState } from "react";
+import ListTour from "./list-tour";
 
 export const DetailTour = () => {
     const [isEdit, setIsEdit] = useState(false);
+    const [openChangeDay, setOpenChangeDay] = useState(false);
 
     return (
         <div>
             <DetailTourHeader onEdit={() => setIsEdit(true)} />
 
-            {isEdit ? <UpdateTour onBack={() => setIsEdit(false)} /> : <DetailTourContent />}
+            {isEdit ? (
+                <UpdateTour onBack={() => setIsEdit(false)} />
+            ) : (
+                <DetailTourContent onOpenChangeDay={() => setOpenChangeDay(true)} />
+            )}
+
+            {openChangeDay && <ChangeDayOrder onClose={() => setOpenChangeDay(false)} />}
         </div>
     );
 };
@@ -117,13 +126,23 @@ const DetailTourHeader = ({ onEdit }: Props) => {
     );
 };
 
-const DetailTourContent = () => {
+interface DetailTourContentProps {
+  onOpenChangeDay: () => void;
+}
+
+const DetailTourContent = ({ onOpenChangeDay }: DetailTourContentProps) => {
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+
   return (
     <div className="flex h-[calc(100vh-80px)] bg-gray-50 overflow-hidden font-sans">
       <div className="w-20 lg:w-48 bg-white border-r border-gray-100 flex flex-col items-center py-6 gap-4">
-        <button className="w-12 h-12 lg:w-40 lg:h-10 flex items-center justify-center gap-2 bg-blue-50 text-[#004b91] rounded-xl hover:bg-blue-100 transition-all group">
+        <button 
+          // onClick={onOpenChangeDay}
+          className="w-12 h-12 lg:w-40 lg:h-10 flex items-center justify-center gap-2 bg-blue-50 text-[#004b91] rounded-xl hover:bg-blue-100 transition-all group cursor-pointer"
+        >
           <Edit3 size={18} />
           <span className="hidden lg:inline text-xs font-bold uppercase tracking-tight">Chỉnh sửa ngày</span>
+          
         </button>
         
         <button className="w-12 h-12 lg:w-40 lg:h-10 flex items-center justify-center gap-2 border border-dashed border-gray-300 text-gray-400 rounded-xl hover:border-[#004b91] hover:text-[#004b91] transition-all group">
@@ -133,7 +152,17 @@ const DetailTourContent = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6 bg-white">
-       
+
+        <div className="">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold text-gray-800">Ngày 1</h3>
+          </div>
+          <ListTour 
+            onChange={(value) => setSelectedService(value)}
+          />
+        </div>
+
+
         <div className="space-y-4">
           <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
             <h3 className="text-lg font-bold text-gray-800">Bao Gồm / Không Bao Gồm</h3>
@@ -192,14 +221,41 @@ const DetailTourContent = () => {
       </div>
 
       <div className="hidden xl:block w-100 bg-gray-100 border-l border-gray-200 relative">
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 space-y-2">
-          <MapPin size={48} strokeWidth={1} />
-          <span className="text-sm font-medium tracking-tight">Map API Loading Area...</span>
-        </div>
-        
-        <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur px-2 py-1 rounded text-[10px] text-gray-500 border border-gray-100">
-           © OpenStreetMap contributors
-        </div>
+        {selectedService ? (
+           <div className="absolute inset-0 bg-white z-10 animate-in fade-in duration-300">
+              <div className="p-8 h-full flex flex-col">
+                <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-6">
+                  <h2 className="text-xl font-bold text-gray-800 uppercase">
+                    {selectedService}
+                  </h2>
+                  <button 
+                    onClick={() => setSelectedService(null)}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <X size={20} className="text-gray-400" />
+                  </button>
+                </div>
+                
+                <div className="flex-1 flex flex-col items-center justify-center text-gray-400 space-y-4">
+                  <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center border border-dashed border-gray-200">
+                    <Plus size={32} />
+                  </div>
+                  <p className="text-sm italic">Đang tải danh sách dịch vụ...</p>
+                </div>
+              </div>
+           </div>
+        ) : (
+          <>
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 space-y-2">
+              <MapPin size={48} strokeWidth={1} />
+              <span className="text-sm font-medium tracking-tight">Map API Loading Area...</span>
+            </div>
+            
+            <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur px-2 py-1 rounded text-[10px] text-gray-500 border border-gray-100">
+               © OpenStreetMap contributors
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
