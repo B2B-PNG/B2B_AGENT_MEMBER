@@ -102,7 +102,7 @@ const TourProposalsView = () => {
             field: "strServiceName",
             headerName: "Tên dịch vụ",
             render: (_, row) => (
-                <button onClick={() => router.push(paths.content.detailTour)} className="space-y-0.5 py-1 min-w-[200px] text-xs flex justify-center cursor-pointer">
+                <button onClick={() => router.replaceParams(paths.content.detailTour, { item: row })} className="space-y-0.5 py-1 min-w-[200px] text-xs flex justify-center cursor-pointer">
                     <div className="flex items-center gap-2 text-[#004b91] font-semibold text-sm">
                         <Building2 size={14} className="text-[#4e6d9a]" />
                         <span className="uppercase tracking-tight">

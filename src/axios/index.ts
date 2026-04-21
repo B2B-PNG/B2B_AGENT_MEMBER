@@ -4,7 +4,7 @@ import type {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
-// import { ACCESS_TOKEN } from "@/utils/constants";
+import { ACCESS_TOKEN } from "@/utils/constants";
 
 export const apiClient: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
@@ -17,7 +17,7 @@ export const apiClient: AxiosInstance = axios.create({
 
 apiClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    // const token = localStorage.getItem(ACCESS_TOKEN);
+    const token = localStorage.getItem(ACCESS_TOKEN);
     const language = localStorage.getItem("i18nextLng") || "vi";
 
     config.headers["Accept-Language"] = language;
@@ -26,10 +26,10 @@ apiClient.interceptors.request.use(
       delete config.headers["Content-Type"];
     }
 
-    // if (token) {
-    //   config.headers["Authorization"] = `Bearer ${token}`;
-    // }
-    // console.log(token); 
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    
     return config;
   },
   (error) => Promise.reject(error)

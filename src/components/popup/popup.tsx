@@ -39,19 +39,22 @@ export const Popup = ({
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
 
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [open]);
 
   return (
     <>
       {open && (
-        <div className="fixed inset-0 bg-black/40  z-[100]">
+        <div className="fixed inset-0 bg-black/40 z-[100] overscroll-contain">
           <div
             className={twMerge(
               clsx(

@@ -34,11 +34,14 @@ const PanelPopup = ({
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden"; 
+      document.documentElement.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"; 
+      document.body.style.overflow = ""; 
+      document.documentElement.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [open]);
   return (
@@ -54,7 +57,7 @@ const PanelPopup = ({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-10"
+                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-10 overscroll-contain"
                   onClick={onClose}
                 />
 

@@ -252,4 +252,10 @@ export const useUpdNotifyIsRead = async (body: any) => {
     );
     return res.data;
 };
-
+export const useAddDayTourCustomized = async (body: any) => {
+    const res = await apiClient.post(
+        "tourcustomized/AddDayTourCustomized",
+        body
+    );
+    return res.data;
+};

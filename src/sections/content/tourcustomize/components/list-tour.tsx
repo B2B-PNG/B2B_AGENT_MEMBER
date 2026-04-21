@@ -75,7 +75,7 @@ const ListTour = ({ onChange }: Props) => {
                     if (value === 'accommodation') {
                        // openHotelPopup();
                     }
-                    onChange(value); // Báo lên Ông nội (DetailTourContent)
+                    onChange(value); 
                     setShowMenu(false);
                   }} 
                 />
