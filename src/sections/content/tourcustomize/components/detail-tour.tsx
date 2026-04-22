@@ -17,7 +17,7 @@ export const DetailTour = () => {
   const tourCode = item?.strTourCode || "---";
   const pax = item?.intTotalPax || 0;
   const version = item?.intVersionID || 1;
-  
+
   const [isEdit, setIsEdit] = useState(false);
 
   // 1. Quản lý trạng thái Popup & Thay đổi tập trung tại cha
@@ -35,9 +35,9 @@ export const DetailTour = () => {
 
   return (
     <div className={isPopupOpen ? "overflow-hidden h-screen" : ""}>
-      <DetailTourHeader 
-        onEdit={() => setIsEdit(true)} 
-        isLocked={isPopupOpen} 
+      <DetailTourHeader
+        onEdit={() => setIsEdit(true)}
+        isLocked={isPopupOpen}
         tourName={tourName}
         tourCode={tourCode}
         pax={pax}

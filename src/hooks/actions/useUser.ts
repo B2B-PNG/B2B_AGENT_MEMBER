@@ -259,3 +259,15 @@ export const useAddDayTourCustomized = async (body: any) => {
     );
     return res.data;
 };
+
+export const useGetListCart = async (body: any) => {
+    const res = await apiClient.post(
+        "booking/GetListCartServiceItem",
+        body
+    );
+    // Axios interceptor đã trả response.data => res có thể là:
+    //   - Object { data: [[...]] }  => cần res.data
+    //   - Mảng [[...]]             => trả thẳng res
+    console.log("[CART DEBUG] res:", res, "| Array.isArray:", Array.isArray(res));
+    return Array.isArray(res) ? res : (res?.data ?? res);
+};

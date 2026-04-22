@@ -46,7 +46,7 @@ const QuoteView = () => {
             headerName: "STT",
             render: (value) => <span className="text-gray-400 font-medium">{value}</span>
         },
-
+        
         {
             field: "strGroupCode",
             headerName: "Mã",
