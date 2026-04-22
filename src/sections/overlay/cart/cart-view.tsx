@@ -1,13 +1,12 @@
-import Pagination from "@/components/pagination/pagination";
 import { TableCore, type ColumnDef } from "@/components/table/table-core";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useGetListCart } from "@/hooks/actions/useUser";
-import { useRouter } from "@/routes/hooks/use-router";
+// import { useRouter } from "@/routes/hooks/use-router";
 import { useUserStore } from "@/zustand/useUserStore";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { Banknote, Building2, Calendar, Edit3, Trash2, Tag, Users, Store, Briefcase } from "lucide-react";
+import { Banknote, Edit3, Trash2, Tag, Users, Briefcase } from "lucide-react";
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import { fDateTime } from "@/utils/format-time";
 
 const CartView = () => {
@@ -20,12 +19,12 @@ const CartView = () => {
         addRess: "",
     });
 
-    const router = useRouter();
+    // const router = useRouter();
     const user = useUserStore((state) => state.user)
-    const [page, setPage] = useState(1);
+    // const [page, setPage] = useState(1);
 
-    const pageSize = 5;
-    const { data, isLoading, isError } = useQuery({
+    // const pageSize = 5;
+    const { data, isLoading } = useQuery({
         queryKey: [QUERY_KEYS.USER.LIST_CART, user?.strUserGUID, user?.intCurrencyID],
         queryFn: () =>
             useGetListCart({
@@ -197,7 +196,7 @@ const CartView = () => {
     ];
 
 
-    const alEmpty = listData.length === 0;
+    // const alEmpty = listData.length === 0;
 
     return (
         <div className="max-w-5xl mx-auto ">

@@ -20,7 +20,7 @@ interface ChangeDayOrderProps {
   strTourCustomizedGUID: string;
 }
 
-const ChangeDayOrder = ({ items, onChanged, onClose, onSave, hasChange, strTourCustomizedGUID }: ChangeDayOrderProps) => {
+const ChangeDayOrder = ({ items, onChanged, onSave, hasChange, strTourCustomizedGUID }: ChangeDayOrderProps) => {
 
   const location = useLocation();
   const item = location.state?.item;
@@ -47,20 +47,20 @@ const ChangeDayOrder = ({ items, onChanged, onClose, onSave, hasChange, strTourC
   };
 
   // 3.1 Xử lý lưu sau khi có tên ngày
-  const handleSaveNewDay = (title: string) => {
-    const newDay: IDayItem = {
-      id: Math.random().toString(36).substr(2, 9),
-      name: `Day ${localDays.length + 1}`, // Giữ logic số thứ tự
-      date: `new day)${title}`, // Định dạng theo screenshot yêu cầu (null hoặc new day)
-    };
-    // Format date field để hiển thị custom title như screenshot người dùng gửi
-    // Trong thực tế, IDayItem có thể cần thêm field 'title' riêng, nhưng hiện tại tôi map vào 'date' để demo UI.
-    const customDay: IDayItem = {
-        ...newDay,
-        date: `(new day)(null): ${title}`
-    };
-    setLocalDays([...localDays, customDay]);
-  };
+  // const handleSaveNewDay = (title: string) => {
+  //   const newDay: IDayItem = {
+  //     id: Math.random().toString(36).substr(2, 9),
+  //     name: `Day ${localDays.length + 1}`, // Giữ logic số thứ tự
+  //     date: `new day)${title}`, // Định dạng theo screenshot yêu cầu (null hoặc new day)
+  //   };
+  //   // Format date field để hiển thị custom title như screenshot người dùng gửi
+  //   // Trong thực tế, IDayItem có thể cần thêm field 'title' riêng, nhưng hiện tại tôi map vào 'date' để demo UI.
+  //   const customDay: IDayItem = {
+  //       ...newDay,
+  //       date: `(new day)(null): ${title}`
+  //   };
+  //   setLocalDays([...localDays, customDay]);
+  // };
 
   // 4. Logic: Reset
   const handleReset = () => {

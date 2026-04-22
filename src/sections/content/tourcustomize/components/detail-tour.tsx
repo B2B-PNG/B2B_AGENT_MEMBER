@@ -182,7 +182,7 @@ interface DetailTourContentProps {
 
 const DetailTourContent = ({
   days,
-  onOpenChangeDay,
+  // onOpenChangeDay,
   onUpdateDays,
   isPopupOpen,
   setIsPopupOpen,

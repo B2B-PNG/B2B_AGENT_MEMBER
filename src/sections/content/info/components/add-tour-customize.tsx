@@ -73,7 +73,7 @@ const AddTourCustomize = ({
 
     if (!finalGUID) {
       console.error("LỖI: Không tìm thấy GUID của Tour!");
-      showToast("Lỗi: Không tìm thấy thông tin Tour", "error");
+      // showToast("error", "Lỗi: Không tìm thấy thông tin Tour");
       return;
     }
 
