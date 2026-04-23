@@ -64,6 +64,7 @@ const MAX_AVATAR_SIZE_BYTES = MAX_AVATAR_SIZE_MB * 1024 * 1024;
 
 const InfoPerson = () => {
   const user = useUserStore((state) => state.user);
+
   const userLoading = useUserStore((state) => state.isLoading);
 
   const { showToast } = useToastStore();
