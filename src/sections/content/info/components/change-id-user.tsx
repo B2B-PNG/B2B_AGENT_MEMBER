@@ -30,9 +30,8 @@ const ChangeIdUser = () => {
 
     const { handleSubmit, formState: { isSubmitting } } = methods;
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit = handleSubmit(async (_) => {
         try {
-            console.log("Cập nhật tên đăng nhập mới:", data);
             await new Promise((resolve) => setTimeout(resolve, 1000));
             showToast("success", "Thay đổi tên đăng nhập thành công");
         } catch (error) {

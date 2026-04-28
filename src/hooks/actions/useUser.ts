@@ -84,6 +84,13 @@ export const useListTourCustomized = async (body: any) => {
     );
     return res.data;
 };
+export const useListServiceTourCustomized = async (body: any) => {
+    const res = await apiClient.post(
+        "tourcustomized/GetListServicesTourCustomized",
+        body
+    );
+    return res.data;
+};
 export const useFilterCompanyBankAccount = async (body: any) => {
     const res = await apiClient.post(
         "user/GetFilterCompanyBankAccount",
@@ -265,9 +272,19 @@ export const useGetListCart = async (body: any) => {
         "booking/GetListCartServiceItem",
         body
     );
-    // Axios interceptor đã trả response.data => res có thể là:
-    //   - Object { data: [[...]] }  => cần res.data
-    //   - Mảng [[...]]             => trả thẳng res
-    console.log("[CART DEBUG] res:", res, "| Array.isArray:", Array.isArray(res));
     return Array.isArray(res) ? res : (res?.data ?? res);
+};
+export const useListTourCustomizedInExService = async (body: any) => {
+    const res = await apiClient.post(
+        "tourcustomized/GetTourCustomizedInExService",
+        body
+    );
+    return res.data;
+};
+export const useListTotalPriceForTourCustom = async (body: any) => {
+    const res = await apiClient.post(
+        "tourcustomized/GetListTotalPriceForTourCustom",
+        body
+    );
+    return res.data;
 };

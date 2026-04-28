@@ -15,6 +15,9 @@ const Header = () => {
   const isLoggedIn = useIsLoggedIn();
   const isLoading = useUserStore((state) => state.isLoading);
 
+  const handleSalesChannelClick = () => {
+    window.open("http://localhost:5175/sales-channel", "_blank", "noopener,noreferrer");
+  };
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-2.5">
       <div className="max-w-360 mx-auto flex justify-between items-center">
@@ -27,8 +30,8 @@ const Header = () => {
             <img src={logo} alt="logo" className="h-10 w-auto object-contain" />
           </button>
 
-          <div className="hidden md:flex items-center gap-2 text-gray-500 hover:text-[#4a6fa5] font-medium text-[14px] cursor-pointer transition-all">
-            <span>Kênh người bán</span>
+          <div onClick={handleSalesChannelClick} className="hidden md:flex items-center gap-2 text-gray-500 hover:text-[#4a6fa5] font-medium text-[14px] cursor-pointer transition-all">
+            <span>Thiết lập kênh bán</span>
           </div>
         </div>
 

@@ -179,13 +179,11 @@ const CartView = () => {
             render: (_, row) => (
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={() => console.log("Edit", row)}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                     >
                         <Edit3 size={18} />
                     </button>
                     <button
-                        onClick={() => console.log("Delete", row)}
                         className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                     >
                         <Trash2 size={18} />

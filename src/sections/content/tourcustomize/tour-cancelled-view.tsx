@@ -1,6 +1,6 @@
 import PrimaryButton from "@/components/button/primary-button";
 import CustomFilter from "@/components/form/custom-filter"
-import { Building2, Calendar, CheckCircle2, Edit3, RotateCcw, Search, Trash2, Users, XCircle } from "lucide-react";
+import { Building2, Calendar, CheckCircle2, Copy, Edit3, RotateCcw, Search, Trash2, Users, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { TableCore, type ColumnDef } from "@/components/table/table-core";
 import Pagination from "@/components/pagination/pagination";
@@ -107,15 +107,28 @@ const TourCancelledView = () => {
             field: "strServiceName",
             headerName: "Tên dịch vụ",
             render: (_, row) => (
-                <button onClick={() => router.push(paths.content.detailTour)} className="space-y-0.5 py-1 min-w-[200px] text-xs flex justify-center cursor-pointer">
-                    <div className="flex items-center gap-2 text-[#004b91] font-semibold text-sm">
+                <div className="space-y-0.5 py-1 min-w-[200px] text-xs flex items-center justify-center gap-2">
+                    <button
+                        onClick={() => router.replaceParams(paths.content.detailTour, { item: row })}
+                        className="flex items-center gap-2 text-[#004b91] font-semibold text-sm cursor-pointer"
+                    >
                         <Building2 size={14} className="text-[#4e6d9a]" />
                         <span className="uppercase tracking-tight">
                             {row?.strServiceName ?? "---"}
                         </span>
-                    </div>
-                </button>
-            ),
+                    </button>
+
+                    <Copy
+                        size={14}
+                        className="cursor-pointer hover:text-[#004b91]"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigator.clipboard.writeText(row?.strServiceName ?? "");
+                            showToast("success", "Đã sao chép tên dịch vụ")
+                        }}
+                    />
+                </div>
+            )
         },
         {
             field: "No",
@@ -228,7 +241,7 @@ const TourCancelledView = () => {
                         {
                             keySearch: "nameProvider",
                             value: filters.nameTour,
-                            placeHoder: "Tên đại lý",
+                            placeHoder: "Tên dịch vụ",
                         },
                     ]}
                 />

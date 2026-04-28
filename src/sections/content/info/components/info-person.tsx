@@ -187,7 +187,6 @@ const InfoPerson = () => {
       intLangID: Number(data.language),
       intCurrencyID: Number(data.currency),
     };
-    console.log("payload ", payload);
     
     updMemberInfoProfileApi(payload, {
       onSuccess: () => {
@@ -195,8 +194,6 @@ const InfoPerson = () => {
       },
       onError: () => {
         showToast("error", "Cập nhật thất bại");
-    console.log("payload ", payload);
-
       },
     });
   });

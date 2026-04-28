@@ -27,6 +27,8 @@ const DetailService = () => {
 
     const user = useUserStore((state) => state.user);
 
+    console.log("item", item)
+
     const { data, isLoading } = useQuery({
         queryKey: [QUERY_KEYS.USER.LIST_AGENT_HOST_SERVICE_ITEM, 1],
         queryFn: () =>
@@ -151,7 +153,7 @@ const DetailService = () => {
                 <div className="flex flex-col gap-1 font-sans">
                     <div className="flex items-center gap-1.5">
                         <h2 className="text-lg font-bold text-gray-800">{item?.strServiceName}</h2>
-                        <button onClick={() => router.push(paths.content.detailTour)} className="text-[#004b91] cursor-pointer hover:opacity-80 transition-opacity">
+                        <button onClick={() => router.replaceParams(paths.content.detailTour, { item: item })} className="text-[#004b91] cursor-pointer hover:opacity-80 transition-opacity">
                             <AlertCircle size={16} strokeWidth={2.5} />
                         </button>
                     </div>

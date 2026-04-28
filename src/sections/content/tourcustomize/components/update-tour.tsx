@@ -52,9 +52,8 @@ const UpdateTour = ({ onBack }: Props) => {
 
     const { handleSubmit, formState: { isSubmitting } } = methods;
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit = handleSubmit(async (_) => {
         try {
-            console.log("Dữ liệu yêu cầu mới:", data);
             showToast("success", "Tạo yêu cầu mới thành công");
         } catch (error) {
             showToast("error", "Có lỗi xảy ra, vui lòng kiểm tra lại");

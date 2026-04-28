@@ -64,13 +64,6 @@ const AddTourCustomize = ({
   const onSubmit = (data: FormValues) => {
     const finalGUID = item?.strTourCustomizedGUID || strTourCustomizedGUID;
     
-    console.log("--- Bắt đầu gửi dữ liệu ---");
-    console.log("Payload:", {
-      strTourCustomizedGUID: finalGUID,
-      strDayTitle: data.strDayTitle,
-      intDayOrder,
-    });
-
     if (!finalGUID) {
       console.error("LỖI: Không tìm thấy GUID của Tour!");
       // showToast("error", "Lỗi: Không tìm thấy thông tin Tour");
