@@ -176,7 +176,7 @@ const CartView = () => {
         {
             field: "actions",
             headerName: "Thao tác",
-            render: (_, row) => (
+            render: (_) => (
                 <div className="flex items-center gap-2">
                     <button
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"

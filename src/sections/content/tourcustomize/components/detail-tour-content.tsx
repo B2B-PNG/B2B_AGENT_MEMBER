@@ -2,7 +2,7 @@ import { useState } from "react";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useListServiceTourCustomized, } from "@/hooks/actions/useUser";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { MapPin, Pen, Plus, X } from "lucide-react";
+import { MapPin, Pen, Plus } from "lucide-react";
 import ListTour from "./list-tour";
 import DetailTourInEx from "./detail-tour-in-ex";
 import DetailTourPrice from "./detail-tour-price";
