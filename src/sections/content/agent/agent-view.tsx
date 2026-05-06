@@ -10,10 +10,8 @@ import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useUserStore } from "@/zustand/useUserStore";
 import type { IAgent } from "@/hooks/interfaces/user";
 import { useToastStore } from "@/zustand/useToastStore";
-import { useRouter } from "@/routes/hooks/use-router";
 
 const AgentView = () => {
-    const router = useRouter();
     const { showToast } = useToastStore()
     const user = useUserStore((state) => state.user);
     const [filters, setFilters] = useState({
