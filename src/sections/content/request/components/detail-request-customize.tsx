@@ -8,6 +8,7 @@ import { useToastStore } from '@/zustand/useToastStore';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/hooks/actions/query-keys';
 import { useListRequestMessage, useListServiceItemBySaleReq } from '@/hooks/actions/useUser';
+import { isValidValue } from '@/utils/utilts';
 
 const DetailRequestCustomize = () => {
     const { showToast } = useToastStore();
@@ -198,7 +199,7 @@ const DetailRequestCustomize = () => {
                                     <div key={msg.strRequestMessageGUID || index} className="border border-gray-200 rounded-lg overflow-hidden">
                                         <div className="bg-blue-50/80 px-3 py-1.5">
                                             <div className="text-sm text-gray-700 font-medium capitalize">
-                                                {msg.strFullName}
+                                                {isValidValue(msg.strFullName)}
                                             </div>
                                             <div className="text-[10px] text-gray-500">
 

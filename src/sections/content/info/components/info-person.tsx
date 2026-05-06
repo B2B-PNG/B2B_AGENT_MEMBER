@@ -18,6 +18,7 @@ import { useUserStore } from "@/zustand/useUserStore";
 import { getUrlImage } from "@/utils/format-image";
 import { updMemberInfoProfile } from "@/hooks/actions/useUser";
 import { useMutation } from "@tanstack/react-query";
+import { isValidValue } from "@/utils/utilts";
 
 const Schema = zod.object({
   avartarFile: zod.any().optional(),
@@ -167,7 +168,7 @@ const InfoPerson = () => {
   };
 
 
-  
+
   const onSubmit = handleSubmit(async (data) => {
     const payload = {
       strMemberGUID: user?.strUserGUID,
@@ -187,7 +188,7 @@ const InfoPerson = () => {
       intLangID: Number(data.language),
       intCurrencyID: Number(data.currency),
     };
-    
+
     updMemberInfoProfileApi(payload, {
       onSuccess: () => {
         showToast("success", "Cập nhật thành công");
@@ -222,9 +223,8 @@ const InfoPerson = () => {
 
               <label htmlFor="avatar-upload" className="cursor-pointer">
                 <div
-                  className={`overflow-hidden w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center border-2 ${
-                    avatarPreview ? "" : "border-dashed"
-                  } border-gray-300 relative hover:opacity-80 transition`}
+                  className={`overflow-hidden w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center border-2 ${avatarPreview ? "" : "border-dashed"
+                    } border-gray-300 relative hover:opacity-80 transition`}
                 >
                   {avatarPreview ? (
                     <img
@@ -244,7 +244,7 @@ const InfoPerson = () => {
             <div className="flex-1 space-y-1">
               <p className="text-sm font-medium text-gray-500">Tên đăng nhập</p>
               <div className="flex items-center gap-4">
-                <span className="font-bold text-lg">{user?.strFullName}</span>
+                <span className="font-bold text-lg">{isValidValue(user?.strFullName)}</span>
                 <button
                   onClick={() =>
                     setOpen((prev) => ({ ...prev, changeId: true }))

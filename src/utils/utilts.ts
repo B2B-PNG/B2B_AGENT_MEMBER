@@ -37,3 +37,15 @@ export const isValidValue = (value: any) => {
 
     return value;
 };
+
+export const buildQuery = (params: Record<string, any>) => {
+    const search = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+            search.append(key, String(value));
+        }
+    });
+
+    return search.toString();
+};

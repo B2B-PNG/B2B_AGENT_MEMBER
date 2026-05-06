@@ -10,6 +10,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useListUserInCompanyOwner } from "@/hooks/actions/useUser";
 import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import type { IListUserInCompanyOwner } from "@/hooks/interfaces/user";
+import { isValidValue } from "@/utils/utilts";
 
 const UserManagement = () => {
     const [open, setOpen] = useState({
@@ -52,7 +53,7 @@ const UserManagement = () => {
             render: (_, row) => (
                 <div className="space-y-1 py-1 min-w-50">
                     <div className="flex items-center gap-1.5 font-medium text-gray-700">
-                        <User size={14} className="text-gray-400" /> {row.strFullName}
+                        <User size={14} className="text-gray-400" /> {isValidValue(row.strFullName)}
                     </div>
                     <div className="text-[11px] text-gray-400 italic ml-5">{row.strEmail}</div>
                 </div>

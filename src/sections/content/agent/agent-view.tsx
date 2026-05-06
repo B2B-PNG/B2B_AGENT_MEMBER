@@ -10,8 +10,10 @@ import { QUERY_KEYS } from "@/hooks/actions/query-keys";
 import { useUserStore } from "@/zustand/useUserStore";
 import type { IAgent } from "@/hooks/interfaces/user";
 import { useToastStore } from "@/zustand/useToastStore";
+import { useRouter } from "@/routes/hooks/use-router";
 
 const AgentView = () => {
+    const router = useRouter();
     const { showToast } = useToastStore()
     const user = useUserStore((state) => state.user);
     const [filters, setFilters] = useState({
@@ -91,7 +93,7 @@ const AgentView = () => {
         {
             field: "No",
             headerName: "Thao tác",
-            render: (_) => (
+            render: (_, row) => (
                 <div className="flex items-center gap-2 min-w-[150px]">
                     <button
                         onClick={() => showToast("info", "Sắp ra mắt")}
@@ -100,7 +102,10 @@ const AgentView = () => {
                         Tariff
                     </button>
                     <button
-                        onClick={() => showToast("info", "Sắp ra mắt")}
+                        onClick={() => {
+                            const url = `http://localhost:5175/?company=${row?.strUrlLink}`;
+                            window.open(url, "_blank", "noopener,noreferrer");
+                        }}
                         className="cursor-pointer px-4 py-1.5 bg-[#004b91] text-white text-[13px] font-medium rounded hover:bg-[#003d76] transition-all shadow-sm"
                     >
                         Shop
